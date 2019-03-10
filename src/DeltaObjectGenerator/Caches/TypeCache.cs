@@ -75,7 +75,7 @@ namespace DeltaObjectGenerator.Caches
 
                     return null;
                 })
-                .Where(p => p != null)
+                .Where(pi => pi != null)
                 .ToList();
 
             DeltaPropertiesByType.AddOrUpdate(type, propertyInfo, (_, pi) => pi);
@@ -83,7 +83,7 @@ namespace DeltaObjectGenerator.Caches
             return propertyInfo;
         }
 
-        public static List<PropertyInfo> GetPropertiesToIgnoreWhenDefault<T>()
+        public static List<PropertyInfo> GetPropertiesToIgnoreOnDefault<T>()
         {
             var type = typeof(T);
             if (PropertiesToIgnoreWhenDefaultByType.TryGetValue(type, out var cachedPropertyInfo))

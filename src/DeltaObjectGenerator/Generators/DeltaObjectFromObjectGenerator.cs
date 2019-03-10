@@ -10,13 +10,13 @@ namespace DeltaObjectGenerator.Geneators
         public static Dictionary<string, string> GetDeltaObject<T>(T originalObject, T newObject)
         {
             var properties = TypeCache.GetDeltaPropertyInfo<T>();
-            var propertiesToNotUpdateWhenDefault = TypeCache.GetPropertiesToIgnoreWhenDefault<T>();
+            var propertiesToIgnoreOnDefault = TypeCache.GetPropertiesToIgnoreOnDefault<T>();
             var deltaObject = new Dictionary<string, string>();
 
             foreach (var property in properties)
             {
                 var newValueStr = property.GetValue(newObject)?.ToString();
-                if (!property.CanUpdate(propertiesToNotUpdateWhenDefault, newValueStr))
+                if (property.IgnoreDelta(propertiesToIgnoreOnDefault, newValueStr))
                 {
                     continue;
                 }
