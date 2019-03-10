@@ -13,6 +13,7 @@ namespace DeltaObjectGenerator.Geneators
 
             foreach (var property in properties)
             {
+                
                 var originalValueStr = property.GetValue(originalObject)?.ToString();
                 var newValueStr = property.GetValue(newObject)?.ToString();
 

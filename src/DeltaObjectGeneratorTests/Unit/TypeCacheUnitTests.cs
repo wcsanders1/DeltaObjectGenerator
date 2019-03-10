@@ -42,9 +42,9 @@ namespace DeltaObjectGeneratorTests.Unit
             public void CachesPropertyInfo_WhenNewTypeProvided()
             {
                 var propertyInfoCache = typeof(TypeCache)
-                    .GetProperty("PropertyInfoByTypeName", 
+                    .GetProperty("PropertyInfoByType", 
                         BindingFlags.NonPublic | BindingFlags.Static)
-                    .GetValue(null) as ConcurrentDictionary<string, List<PropertyInfo>>;
+                    .GetValue(null) as ConcurrentDictionary<Type, List<PropertyInfo>>;
 
                 Assert.NotNull(propertyInfoCache);
                 Assert.Empty(propertyInfoCache);
@@ -52,12 +52,12 @@ namespace DeltaObjectGeneratorTests.Unit
                 var customerPropertiesFirstCall = TypeCache.GetPropertyInfo<TestCustomer>();
 
                 Assert.Single(propertyInfoCache);
-                Assert.True(propertyInfoCache.TryGetValue(typeof(TestCustomer).FullName, out _));
+                Assert.True(propertyInfoCache.TryGetValue(typeof(TestCustomer), out _));
 
                 var customerPropertiesSecondCall = TypeCache.GetPropertyInfo<TestCustomer>();
 
                 Assert.Single(propertyInfoCache);
-                Assert.True(propertyInfoCache.TryGetValue(typeof(TestCustomer).FullName, out _));
+                Assert.True(propertyInfoCache.TryGetValue(typeof(TestCustomer), out _));
 
                 var comparedResult = GetCompareLogic().Compare(customerPropertiesFirstCall,
                     customerPropertiesSecondCall);
@@ -67,8 +67,8 @@ namespace DeltaObjectGeneratorTests.Unit
                 var accountProperties = TypeCache.GetPropertyInfo<TestAccount>();
 
                 Assert.Equal(2, propertyInfoCache.Count);
-                Assert.True(propertyInfoCache.TryGetValue(typeof(TestCustomer).FullName, out _));
-                Assert.True(propertyInfoCache.TryGetValue(typeof(TestAccount).FullName, out _));
+                Assert.True(propertyInfoCache.TryGetValue(typeof(TestCustomer), out _));
+                Assert.True(propertyInfoCache.TryGetValue(typeof(TestAccount), out _));
             }
         }
 
