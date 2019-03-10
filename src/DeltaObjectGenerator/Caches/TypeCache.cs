@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DeltaObjectGenerator.Attributes;
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,7 @@ namespace DeltaObjectGenerator.Caches
     internal static class TypeCache
     {
         private static ConcurrentDictionary<Type, List<PropertyInfo>> PropertyInfoByType { get; }
+        private static ConcurrentDictionary<Type, List<PropertyInfo>> PropertiesToNotUpdateWhenDefaultByType { get; }
 
         private static readonly Dictionary<Type, string> StringifiedDefaultValuesByType = 
             new Dictionary<Type, string>
@@ -25,7 +27,11 @@ namespace DeltaObjectGenerator.Caches
             {typeof(short), default(short).ToString() },
             {typeof(uint), default(uint).ToString() },
             {typeof(ulong), default(ulong).ToString() },
-            {typeof(ushort), default(ushort).ToString() }
+            {typeof(ushort), default(ushort).ToString() },
+            {typeof(DateTime), default(DateTime).ToString() },
+            {typeof(DateTimeOffset), default(DateTimeOffset).ToString() },
+            {typeof(TimeSpan), default(TimeSpan).ToString() },
+            {typeof(Guid), default(Guid).ToString() },
         };
 
         private static readonly List<Type> AcceptedNonPrimitiveTypes = new List<Type>
@@ -41,17 +47,18 @@ namespace DeltaObjectGenerator.Caches
         static TypeCache()
         {
             PropertyInfoByType = new ConcurrentDictionary<Type, List<PropertyInfo>>();
+            PropertiesToNotUpdateWhenDefaultByType = new ConcurrentDictionary<Type, List<PropertyInfo>>();
         }
 
         public static List<PropertyInfo> GetPropertyInfo<T>()
         {
-            var currentType = typeof(T);
-            if (PropertyInfoByType.TryGetValue(currentType, out var cachedPropertyInfo))
+            var type = typeof(T);
+            if (PropertyInfoByType.TryGetValue(type, out var cachedPropertyInfo))
             {
                 return cachedPropertyInfo;
             }
 
-            var propertyInfo = currentType
+            var propertyInfo = type
                 .GetProperties()
                 .Select(p => 
                 {
@@ -66,14 +73,48 @@ namespace DeltaObjectGenerator.Caches
                 .Where(p => p != null)
                 .ToList();
 
-            PropertyInfoByType.AddOrUpdate(currentType, propertyInfo, (_, pi) => pi);
+            PropertyInfoByType.AddOrUpdate(type, propertyInfo, (_, pi) => pi);
 
             return propertyInfo;
         }
 
-        public static T GetDefaultValue<T>()
+        public static List<PropertyInfo> GetPropertiesToNotUpdateWhenDefault<T>()
         {
-            return Activator.CreateInstance<T>();
+            var type = typeof(T);
+            if (PropertiesToNotUpdateWhenDefaultByType.TryGetValue(type, out var cachedPropertyInfo))
+            {
+                return cachedPropertyInfo;
+            }
+
+            var propertiesToNotUpdateWhenNull = type
+                .GetProperties()
+                .Where(pi => Attribute.IsDefined(pi, typeof(DoNotUpdateWhenDefaultAttribute)))
+                .ToList();
+
+            PropertiesToNotUpdateWhenDefaultByType.AddOrUpdate(type,
+                propertiesToNotUpdateWhenNull, (_, pi) => pi);
+
+            return propertiesToNotUpdateWhenNull;
+        }
+
+        public static string GetStringifiedDefaultValueForType(Type type)
+        {
+            if (!type.IsValueType)
+            {
+                return null;
+            }
+
+            if (type.IsEnum)
+            {
+                return 0.ToString();
+            }
+
+            if (StringifiedDefaultValuesByType.TryGetValue(type, out var val))
+            {
+                return val;
+            }
+
+            return null;
         }
     }
 }
