@@ -8,5 +8,6 @@ namespace DeltaObjectGeneratorTests.TestModels
         public string LastName { get; set; }
         public int Age { get; set; }
         public DateTime DateOfBirth { get; set; }
+        public TestAccount Account { get; set; }
     }
 }
