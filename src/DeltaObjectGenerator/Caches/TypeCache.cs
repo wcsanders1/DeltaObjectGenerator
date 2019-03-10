@@ -60,12 +60,17 @@ namespace DeltaObjectGenerator.Caches
 
             var propertyInfo = type
                 .GetProperties()
-                .Select(p => 
+                .Select(pi => 
                 {
-                    var pType = p.PropertyType;
+                    if (Attribute.IsDefined(pi, typeof(IgnoreDeltaAttribute)))
+                    {
+                        return null;
+                    }
+
+                    var pType = pi.PropertyType;
                     if (pType.IsPrimitive || pType.IsEnum || AcceptedNonPrimitiveTypes.Contains(pType))
                     {
-                        return p;
+                        return pi;
                     }
 
                     return null;
@@ -88,7 +93,7 @@ namespace DeltaObjectGenerator.Caches
 
             var propertiesToNotUpdateWhenNull = type
                 .GetProperties()
-                .Where(pi => Attribute.IsDefined(pi, typeof(IgnoreDeltaWhenDefaultAttribute)))
+                .Where(pi => Attribute.IsDefined(pi, typeof(IgnoreDeltaOnDefaultAttribute)))
                 .ToList();
 
             PropertiesToIgnoreWhenDefaultByType.AddOrUpdate(type,
