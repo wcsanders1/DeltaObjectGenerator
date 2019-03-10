@@ -27,7 +27,7 @@ namespace DeltaObjectGeneratorTests.Unit
             [Fact]
             public void DoesNotIncludeNonAcceptedTypes_WhenProvidedTypeIncludedNonAcceptedTypes()
             {
-                var customerProperties = TypeCache.GetPropertyInfo<TestCustomer>();
+                var customerProperties = TypeCache.GetDeltaPropertyInfo<TestCustomer>();
 
                 Assert.NotNull(customerProperties);
                 Assert.IsType<List<PropertyInfo>>(customerProperties);
@@ -42,21 +42,19 @@ namespace DeltaObjectGeneratorTests.Unit
             public void CachesPropertyInfo_WhenNewTypeProvided()
             {
                 var propertyInfoCache = typeof(TypeCache)
-                    .GetProperty("PropertyInfoByType", 
+                    .GetProperty("DeltaPropertiesByType", 
                         BindingFlags.NonPublic | BindingFlags.Static)
                     .GetValue(null) as ConcurrentDictionary<Type, List<PropertyInfo>>;
 
                 Assert.NotNull(propertyInfoCache);
                 Assert.Empty(propertyInfoCache);
 
-                var customerPropertiesFirstCall = TypeCache.GetPropertyInfo<TestCustomer>();
+                var customerPropertiesFirstCall = TypeCache.GetDeltaPropertyInfo<TestCustomer>();
 
-                Assert.Single(propertyInfoCache);
                 Assert.True(propertyInfoCache.TryGetValue(typeof(TestCustomer), out _));
 
-                var customerPropertiesSecondCall = TypeCache.GetPropertyInfo<TestCustomer>();
+                var customerPropertiesSecondCall = TypeCache.GetDeltaPropertyInfo<TestCustomer>();
 
-                Assert.Single(propertyInfoCache);
                 Assert.True(propertyInfoCache.TryGetValue(typeof(TestCustomer), out _));
 
                 var comparedResult = GetCompareLogic().Compare(customerPropertiesFirstCall,
@@ -64,9 +62,8 @@ namespace DeltaObjectGeneratorTests.Unit
 
                 Assert.True(comparedResult.AreEqual);
 
-                var accountProperties = TypeCache.GetPropertyInfo<TestAccount>();
+                var accountProperties = TypeCache.GetDeltaPropertyInfo<TestAccount>();
 
-                Assert.Equal(2, propertyInfoCache.Count);
                 Assert.True(propertyInfoCache.TryGetValue(typeof(TestCustomer), out _));
                 Assert.True(propertyInfoCache.TryGetValue(typeof(TestAccount), out _));
             }

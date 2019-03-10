@@ -9,8 +9,8 @@ namespace DeltaObjectGenerator.Geneators
     {
         public static Dictionary<string, string> GetDeltaObject<T>(T originalObject, T newObject)
         {
-            var properties = TypeCache.GetPropertyInfo<T>();
-            var propertiesToNotUpdateWhenDefault = TypeCache.GetPropertiesToNotUpdateWhenDefault<T>();
+            var properties = TypeCache.GetDeltaPropertyInfo<T>();
+            var propertiesToNotUpdateWhenDefault = TypeCache.GetPropertiesToIgnoreWhenDefault<T>();
             var deltaObject = new Dictionary<string, string>();
 
             foreach (var property in properties)

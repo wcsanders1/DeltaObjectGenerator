@@ -25,6 +25,45 @@ namespace DeltaObjectGeneratorTests.Unit
                 var deltaObject = DeltaObjectFromObjectGenerator.GetDeltaObject(originalCustomer, newCustomer);
 
                 Assert.Single(deltaObject);
+                Assert.Equal(newCustomer.FirstName, deltaObject[nameof(TestCustomer.FirstName)]);
+            }
+
+            [Fact]
+            public void ReturnsObject_WithoutValueToIgnoreOnDefault()
+            {
+                var originalCustomer = new TestCustomerWithIgnoreOnDefaultAttribute
+                {
+                    FirstName = "original first name",
+                    LastName = "original last name"
+                };
+
+                var newCustomer = new TestCustomerWithIgnoreOnDefaultAttribute();
+
+                var deltaObject = DeltaObjectFromObjectGenerator.GetDeltaObject(originalCustomer, newCustomer);
+
+                Assert.Single(deltaObject);
+                Assert.Null(deltaObject[nameof(TestCustomer.FirstName)]);
+            }
+
+            [Fact]
+            public void ReturnsObject_WithValueOfNonDefaultNewValue()
+            {
+                var originalCustomer = new TestCustomerWithIgnoreOnDefaultAttribute
+                {
+                    FirstName = "original first name",
+                    LastName = "original last name"
+                };
+
+                var newCustomer = new TestCustomerWithIgnoreOnDefaultAttribute
+                {
+                    LastName = "new last name"
+                };
+
+                var deltaObject = DeltaObjectFromObjectGenerator.GetDeltaObject(originalCustomer, newCustomer);
+
+                Assert.Equal(2, deltaObject.Count);
+                Assert.Null(deltaObject[nameof(TestCustomerWithIgnoreOnDefaultAttribute.FirstName)]);
+                Assert.Equal(newCustomer.LastName, deltaObject[nameof(TestCustomerWithIgnoreOnDefaultAttribute.LastName)]);
             }
         }
     }

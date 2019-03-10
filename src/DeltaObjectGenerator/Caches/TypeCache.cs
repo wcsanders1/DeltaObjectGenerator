@@ -9,8 +9,8 @@ namespace DeltaObjectGenerator.Caches
 {
     internal static class TypeCache
     {
-        private static ConcurrentDictionary<Type, List<PropertyInfo>> PropertyInfoByType { get; }
-        private static ConcurrentDictionary<Type, List<PropertyInfo>> PropertiesToNotUpdateWhenDefaultByType { get; }
+        private static ConcurrentDictionary<Type, List<PropertyInfo>> DeltaPropertiesByType { get; }
+        private static ConcurrentDictionary<Type, List<PropertyInfo>> PropertiesToIgnoreWhenDefaultByType { get; }
 
         private static readonly Dictionary<Type, string> StringifiedDefaultValuesByType = 
             new Dictionary<Type, string>
@@ -46,14 +46,14 @@ namespace DeltaObjectGenerator.Caches
 
         static TypeCache()
         {
-            PropertyInfoByType = new ConcurrentDictionary<Type, List<PropertyInfo>>();
-            PropertiesToNotUpdateWhenDefaultByType = new ConcurrentDictionary<Type, List<PropertyInfo>>();
+            DeltaPropertiesByType = new ConcurrentDictionary<Type, List<PropertyInfo>>();
+            PropertiesToIgnoreWhenDefaultByType = new ConcurrentDictionary<Type, List<PropertyInfo>>();
         }
 
-        public static List<PropertyInfo> GetPropertyInfo<T>()
+        public static List<PropertyInfo> GetDeltaPropertyInfo<T>()
         {
             var type = typeof(T);
-            if (PropertyInfoByType.TryGetValue(type, out var cachedPropertyInfo))
+            if (DeltaPropertiesByType.TryGetValue(type, out var cachedPropertyInfo))
             {
                 return cachedPropertyInfo;
             }
@@ -73,25 +73,25 @@ namespace DeltaObjectGenerator.Caches
                 .Where(p => p != null)
                 .ToList();
 
-            PropertyInfoByType.AddOrUpdate(type, propertyInfo, (_, pi) => pi);
+            DeltaPropertiesByType.AddOrUpdate(type, propertyInfo, (_, pi) => pi);
 
             return propertyInfo;
         }
 
-        public static List<PropertyInfo> GetPropertiesToNotUpdateWhenDefault<T>()
+        public static List<PropertyInfo> GetPropertiesToIgnoreWhenDefault<T>()
         {
             var type = typeof(T);
-            if (PropertiesToNotUpdateWhenDefaultByType.TryGetValue(type, out var cachedPropertyInfo))
+            if (PropertiesToIgnoreWhenDefaultByType.TryGetValue(type, out var cachedPropertyInfo))
             {
                 return cachedPropertyInfo;
             }
 
             var propertiesToNotUpdateWhenNull = type
                 .GetProperties()
-                .Where(pi => Attribute.IsDefined(pi, typeof(DoNotUpdateWhenDefaultAttribute)))
+                .Where(pi => Attribute.IsDefined(pi, typeof(IgnoreDeltaWhenDefaultAttribute)))
                 .ToList();
 
-            PropertiesToNotUpdateWhenDefaultByType.AddOrUpdate(type,
+            PropertiesToIgnoreWhenDefaultByType.AddOrUpdate(type,
                 propertiesToNotUpdateWhenNull, (_, pi) => pi);
 
             return propertiesToNotUpdateWhenNull;

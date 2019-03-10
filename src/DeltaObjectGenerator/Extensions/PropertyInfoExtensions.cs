@@ -11,7 +11,7 @@ namespace DeltaObjectGenerator.Extensions
         {
             if (propertiesToNotUpdateWhenDefault.Contains(property))
             {
-                return TypeCache.GetStringifiedDefaultValueForType(property.PropertyType) == stringifiedNewValue;
+                return TypeCache.GetStringifiedDefaultValueForType(property.PropertyType) != stringifiedNewValue;
             }
 
             return true;

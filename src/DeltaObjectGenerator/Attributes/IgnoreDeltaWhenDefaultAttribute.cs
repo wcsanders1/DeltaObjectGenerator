@@ -3,6 +3,6 @@
 namespace DeltaObjectGenerator.Attributes
 {
     [AttributeUsage(AttributeTargets.Property, AllowMultiple = false, Inherited = true)]
-    public class DoNotUpdateWhenDefaultAttribute : Attribute
+    public class IgnoreDeltaWhenDefaultAttribute : Attribute
     {}
 }
