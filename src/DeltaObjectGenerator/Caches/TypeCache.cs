@@ -68,7 +68,10 @@ namespace DeltaObjectGenerator.Caches
                     }
 
                     var pType = pi.PropertyType;
-                    if (pType.IsPrimitive || pType.IsEnum || AcceptedNonPrimitiveTypes.Contains(pType))
+                    if (Nullable.GetUnderlyingType(pType) != null || 
+                        pType.IsPrimitive || 
+                        pType.IsEnum || 
+                        AcceptedNonPrimitiveTypes.Contains(pType))
                     {
                         return pi;
                     }

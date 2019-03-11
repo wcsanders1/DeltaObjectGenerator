@@ -104,6 +104,76 @@ namespace DeltaObjectGeneratorTests.Unit
                 Assert.Equal(newCustomer.LastName, deltaObjects.First(o => o.PropertyName ==
                     nameof(TestCustomerWithDeltaObjectIgnoreAttribute.LastName)).NewValue);
             }
+
+            [Fact]
+            public void ReturnsObject_WithNullableWhenValueChanged()
+            {
+                var originalCustomer = new TestCustomerWithNullable
+                {
+                    Age = 30,
+                    Salary = 100000.45M
+                };
+
+                var newCustomer = new TestCustomerWithNullable
+                {
+                    Age = 40,
+                    Salary = 100000.46M
+                };
+
+                var deltaObjects = DeltaObjectFromObjectGenerator.GetDeltaObject(originalCustomer, newCustomer);
+
+                Assert.Equal(2, deltaObjects.Count);
+                Assert.Equal(newCustomer.Salary.ToString(), deltaObjects.First(o => o.PropertyName ==
+                    nameof(TestCustomerWithNullable.Salary)).NewValue);
+                Assert.Equal(newCustomer.Age.ToString(), deltaObjects.First(o => o.PropertyName ==
+                    nameof(TestCustomerWithNullable.Age)).NewValue);
+            }
+
+            [Fact]
+            public void ReturnsObject_WithNullableNullWhenValueChangedToNull()
+            {
+                var originalCustomer = new TestCustomerWithNullable
+                {
+                    Age = 30,
+                    Salary = 100000.45M
+                };
+
+                var newCustomer = new TestCustomerWithNullable
+                {
+                    Age = 40,
+                    Salary = null
+                };
+
+                var deltaObjects = DeltaObjectFromObjectGenerator.GetDeltaObject(originalCustomer, newCustomer);
+
+                Assert.Equal(2, deltaObjects.Count);
+                Assert.Null(deltaObjects.First(o => o.PropertyName ==
+                    nameof(TestCustomerWithNullable.Salary)).NewValue);
+                Assert.Equal(newCustomer.Age.ToString(), deltaObjects.First(o => o.PropertyName ==
+                    nameof(TestCustomerWithNullable.Age)).NewValue);
+            }
+
+            [Fact]
+            public void ReturnsObjectWithoutNullable_WhenNullableIgnoredOnDefault()
+            {
+                var originalCustomer = new TestCustomerWithNullableIgnoreOnDefault
+                {
+                    Age = 30,
+                    Salary = 100000M
+                };
+
+                var newCustomer = new TestCustomerWithNullableIgnoreOnDefault
+                {
+                    Age = 40,
+                    Salary = null
+                };
+
+                var deltaObjects = DeltaObjectFromObjectGenerator.GetDeltaObject(originalCustomer, newCustomer);
+
+                Assert.Single(deltaObjects);
+                Assert.Equal(newCustomer.Age.ToString(), deltaObjects.First(o => o.PropertyName ==
+                    nameof(TestCustomerWithNullable.Age)).NewValue);
+            }
         }
     }
 }
