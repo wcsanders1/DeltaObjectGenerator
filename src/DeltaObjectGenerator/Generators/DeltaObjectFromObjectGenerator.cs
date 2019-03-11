@@ -1,5 +1,6 @@
 ﻿using DeltaObjectGenerator.Caches;
 using DeltaObjectGenerator.Extensions;
+using DeltaObjectGenerator.Models;
 using System;
 using System.Collections.Generic;
 
@@ -7,11 +8,11 @@ namespace DeltaObjectGenerator.Geneators
 {
     internal static class DeltaObjectFromObjectGenerator
     {
-        public static Dictionary<string, string> GetDeltaObject<T>(T originalObject, T newObject)
+        public static List<DeltaObject> GetDeltaObject<T>(T originalObject, T newObject)
         {
             var properties = TypeCache.GetDeltaPropertyInfo<T>();
             var propertiesToIgnoreOnDefault = TypeCache.GetPropertiesToIgnoreOnDefault<T>();
-            var deltaObject = new Dictionary<string, string>();
+            var deltaObjects = new List<DeltaObject>();
 
             foreach (var property in properties)
             {
@@ -24,11 +25,20 @@ namespace DeltaObjectGenerator.Geneators
                 var originalValueStr = property.GetValue(originalObject)?.ToString();
                 if (!string.Equals(originalValueStr, newValueStr, StringComparison.InvariantCulture))
                 {
-                    deltaObject.Add(property.Name, newValueStr);
+                    deltaObjects.Add(new DeltaObject
+                    {
+                        PropertyName = property.Name,
+                        
+                        //TODO1: Make this respect a custom attribute
+                        PropertyAlias = property.Name,
+
+                        OriginalValue = originalValueStr,
+                        NewValue = newValueStr
+                    });
                 }
             }
 
-            return deltaObject;
+            return deltaObjects;
         }
     }
 }

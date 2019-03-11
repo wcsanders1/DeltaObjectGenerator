@@ -1,5 +1,6 @@
 ﻿using DeltaObjectGenerator.Geneators;
 using DeltaObjectGeneratorTests.TestModels;
+using System.Linq;
 using Xunit;
 
 namespace DeltaObjectGeneratorTests.Unit
@@ -22,10 +23,13 @@ namespace DeltaObjectGeneratorTests.Unit
                     FirstName = "new name"
                 };
 
-                var deltaObject = DeltaObjectFromObjectGenerator.GetDeltaObject(originalCustomer, newCustomer);
+                var deltaObjects = DeltaObjectFromObjectGenerator.GetDeltaObject(originalCustomer, newCustomer);
 
-                Assert.Single(deltaObject);
-                Assert.Equal(newCustomer.FirstName, deltaObject[nameof(TestCustomer.FirstName)]);
+                Assert.Single(deltaObjects);
+                Assert.Equal(nameof(TestCustomer.FirstName), deltaObjects.First().PropertyName);
+                Assert.Equal(nameof(TestCustomer.FirstName), deltaObjects.First().PropertyAlias);
+                Assert.Equal(originalCustomer.FirstName, deltaObjects.First().OriginalValue);
+                Assert.Equal(newCustomer.FirstName, deltaObjects.First().NewValue);
             }
 
             [Fact]
@@ -39,10 +43,15 @@ namespace DeltaObjectGeneratorTests.Unit
 
                 var newCustomer = new TestCustomerWithDeltaObjectIgnoreOnDefaultAttribute();
 
-                var deltaObject = DeltaObjectFromObjectGenerator.GetDeltaObject(originalCustomer, newCustomer);
+                var deltaObjects = DeltaObjectFromObjectGenerator.GetDeltaObject(originalCustomer, newCustomer);
 
-                Assert.Single(deltaObject);
-                Assert.Null(deltaObject[nameof(TestCustomer.FirstName)]);
+                Assert.Single(deltaObjects);
+                Assert.Equal(nameof(TestCustomerWithDeltaObjectIgnoreOnDefaultAttribute.FirstName),
+                    deltaObjects.First().PropertyName);
+                Assert.Equal(nameof(TestCustomerWithDeltaObjectIgnoreOnDefaultAttribute.FirstName),
+                    deltaObjects.First().PropertyAlias);
+                Assert.Equal(originalCustomer.FirstName, deltaObjects.First().OriginalValue);
+                Assert.Null(deltaObjects.First().NewValue);
             }
 
             [Fact]
@@ -59,11 +68,17 @@ namespace DeltaObjectGeneratorTests.Unit
                     LastName = "new last name"
                 };
 
-                var deltaObject = DeltaObjectFromObjectGenerator.GetDeltaObject(originalCustomer, newCustomer);
+                var deltaObjects = DeltaObjectFromObjectGenerator.GetDeltaObject(originalCustomer, newCustomer);
 
-                Assert.Equal(2, deltaObject.Count);
-                Assert.Null(deltaObject[nameof(TestCustomerWithDeltaObjectIgnoreOnDefaultAttribute.FirstName)]);
-                Assert.Equal(newCustomer.LastName, deltaObject[nameof(TestCustomerWithDeltaObjectIgnoreOnDefaultAttribute.LastName)]);
+                Assert.Equal(2, deltaObjects.Count);
+                Assert.Null(deltaObjects.First(o => o.PropertyName ==
+                    nameof(TestCustomerWithDeltaObjectIgnoreOnDefaultAttribute.FirstName)).NewValue);
+                Assert.Equal(originalCustomer.FirstName, deltaObjects.First(o => o.PropertyName ==
+                    nameof(TestCustomerWithDeltaObjectIgnoreOnDefaultAttribute.FirstName)).OriginalValue);
+                Assert.Equal(originalCustomer.LastName, deltaObjects.First(o => o.PropertyName ==
+                    nameof(TestCustomerWithDeltaObjectIgnoreOnDefaultAttribute.LastName)).OriginalValue);
+                Assert.Equal(newCustomer.LastName, deltaObjects.First(o => o.PropertyName ==
+                    nameof(TestCustomerWithDeltaObjectIgnoreOnDefaultAttribute.LastName)).NewValue);
             }
 
             [Fact]
@@ -81,10 +96,13 @@ namespace DeltaObjectGeneratorTests.Unit
                     LastName = "new last name"
                 };
 
-                var deltaObject = DeltaObjectFromObjectGenerator.GetDeltaObject(originalCustomer, newCustomer);
+                var deltaObjects = DeltaObjectFromObjectGenerator.GetDeltaObject(originalCustomer, newCustomer);
 
-                Assert.Single(deltaObject);
-                Assert.Equal(newCustomer.LastName, deltaObject[nameof(TestCustomerWithDeltaObjectIgnoreOnDefaultAttribute.LastName)]);
+                Assert.Single(deltaObjects);
+                Assert.Equal(originalCustomer.LastName, deltaObjects.First(o => o.PropertyName ==
+                    nameof(TestCustomerWithDeltaObjectIgnoreAttribute.LastName)).OriginalValue);
+                Assert.Equal(newCustomer.LastName, deltaObjects.First(o => o.PropertyName ==
+                    nameof(TestCustomerWithDeltaObjectIgnoreAttribute.LastName)).NewValue);
             }
         }
     }
