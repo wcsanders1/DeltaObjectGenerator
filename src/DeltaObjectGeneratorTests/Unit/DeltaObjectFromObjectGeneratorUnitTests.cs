@@ -31,13 +31,13 @@ namespace DeltaObjectGeneratorTests.Unit
             [Fact]
             public void ReturnsObject_WithoutValueToIgnoreOnDefault()
             {
-                var originalCustomer = new TestCustomerWithIgnoreOnDefaultAttribute
+                var originalCustomer = new TestCustomerWithDeltaObjectIgnoreOnDefaultAttribute
                 {
                     FirstName = "original first name",
                     LastName = "original last name"
                 };
 
-                var newCustomer = new TestCustomerWithIgnoreOnDefaultAttribute();
+                var newCustomer = new TestCustomerWithDeltaObjectIgnoreOnDefaultAttribute();
 
                 var deltaObject = DeltaObjectFromObjectGenerator.GetDeltaObject(originalCustomer, newCustomer);
 
@@ -48,13 +48,13 @@ namespace DeltaObjectGeneratorTests.Unit
             [Fact]
             public void ReturnsObject_WithValueOfNonDefaultNewValue()
             {
-                var originalCustomer = new TestCustomerWithIgnoreOnDefaultAttribute
+                var originalCustomer = new TestCustomerWithDeltaObjectIgnoreOnDefaultAttribute
                 {
                     FirstName = "original first name",
                     LastName = "original last name"
                 };
 
-                var newCustomer = new TestCustomerWithIgnoreOnDefaultAttribute
+                var newCustomer = new TestCustomerWithDeltaObjectIgnoreOnDefaultAttribute
                 {
                     LastName = "new last name"
                 };
@@ -62,20 +62,20 @@ namespace DeltaObjectGeneratorTests.Unit
                 var deltaObject = DeltaObjectFromObjectGenerator.GetDeltaObject(originalCustomer, newCustomer);
 
                 Assert.Equal(2, deltaObject.Count);
-                Assert.Null(deltaObject[nameof(TestCustomerWithIgnoreOnDefaultAttribute.FirstName)]);
-                Assert.Equal(newCustomer.LastName, deltaObject[nameof(TestCustomerWithIgnoreOnDefaultAttribute.LastName)]);
+                Assert.Null(deltaObject[nameof(TestCustomerWithDeltaObjectIgnoreOnDefaultAttribute.FirstName)]);
+                Assert.Equal(newCustomer.LastName, deltaObject[nameof(TestCustomerWithDeltaObjectIgnoreOnDefaultAttribute.LastName)]);
             }
 
             [Fact]
             public void ReturnsObject_WithoutValueToIgnore()
             {
-                var originalCustomer = new TestCustomerWithIgnoreDeltaAttribute
+                var originalCustomer = new TestCustomerWithDeltaObjectIgnoreAttribute
                 {
                     FirstName = "original first name",
                     LastName = "original last name"
                 };
 
-                var newCustomer = new TestCustomerWithIgnoreDeltaAttribute
+                var newCustomer = new TestCustomerWithDeltaObjectIgnoreAttribute
                 {
                     FirstName = "new first name",
                     LastName = "new last name"
@@ -84,7 +84,7 @@ namespace DeltaObjectGeneratorTests.Unit
                 var deltaObject = DeltaObjectFromObjectGenerator.GetDeltaObject(originalCustomer, newCustomer);
 
                 Assert.Single(deltaObject);
-                Assert.Equal(newCustomer.LastName, deltaObject[nameof(TestCustomerWithIgnoreOnDefaultAttribute.LastName)]);
+                Assert.Equal(newCustomer.LastName, deltaObject[nameof(TestCustomerWithDeltaObjectIgnoreOnDefaultAttribute.LastName)]);
             }
         }
     }

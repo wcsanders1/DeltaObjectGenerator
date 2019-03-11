@@ -3,12 +3,13 @@ using System;
 
 namespace DeltaObjectGeneratorTests.TestModels
 {
-    public class TestCustomerWithIgnoreDeltaAttribute
+    public class TestCustomerWithDeltaObjectIgnoreOnDefaultAttribute
     {
-        [IgnoreDelta]
         public string FirstName { get; set; }
 
+        [DeltaObjectIgnoreOnDefault]
         public string LastName { get; set; }
+        
         public int Age { get; set; }
         public DateTime DateOfBirth { get; set; }
         public TestAccount Account { get; set; }

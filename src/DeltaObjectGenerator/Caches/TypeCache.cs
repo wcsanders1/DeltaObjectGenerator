@@ -62,7 +62,7 @@ namespace DeltaObjectGenerator.Caches
                 .GetProperties()
                 .Select(pi => 
                 {
-                    if (Attribute.IsDefined(pi, typeof(IgnoreDeltaAttribute)))
+                    if (Attribute.IsDefined(pi, typeof(DeltaObjectIgnoreAttribute)))
                     {
                         return null;
                     }
@@ -93,7 +93,7 @@ namespace DeltaObjectGenerator.Caches
 
             var propertiesToNotUpdateWhenNull = type
                 .GetProperties()
-                .Where(pi => Attribute.IsDefined(pi, typeof(IgnoreDeltaOnDefaultAttribute)))
+                .Where(pi => Attribute.IsDefined(pi, typeof(DeltaObjectIgnoreOnDefaultAttribute)))
                 .ToList();
 
             PropertiesToIgnoreWhenDefaultByType.AddOrUpdate(type,
