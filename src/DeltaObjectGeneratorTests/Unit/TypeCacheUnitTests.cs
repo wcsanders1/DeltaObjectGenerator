@@ -1,4 +1,5 @@
 ﻿using DeltaObjectGenerator.Caches;
+using DeltaObjectGenerator.Models;
 using DeltaObjectGeneratorTests.TestModels;
 using KellermanSoftware.CompareNetObjects;
 using System;
@@ -30,12 +31,12 @@ namespace DeltaObjectGeneratorTests.Unit
                 var customerProperties = TypeCache.GetDeltaPropertyInfo<TestCustomer>();
 
                 Assert.NotNull(customerProperties);
-                Assert.IsType<List<PropertyInfo>>(customerProperties);
+                Assert.IsType<List<DeltaProperty>>(customerProperties);
                 Assert.NotEmpty(customerProperties);
                 Assert.True(customerProperties.TrueForAll(p =>
-                    p.PropertyType.IsPrimitive || 
-                    p.PropertyType.IsEnum || 
-                    AcceptedNonPrimitiveTypes.Contains(p.PropertyType)));
+                    p.PropertyInfo.PropertyType.IsPrimitive || 
+                    p.PropertyInfo.PropertyType.IsEnum || 
+                    AcceptedNonPrimitiveTypes.Contains(p.PropertyInfo.PropertyType)));
             }
 
             [Fact]
@@ -44,7 +45,7 @@ namespace DeltaObjectGeneratorTests.Unit
                 var propertyInfoCache = typeof(TypeCache)
                     .GetProperty("DeltaPropertiesByType", 
                         BindingFlags.NonPublic | BindingFlags.Static)
-                    .GetValue(null) as ConcurrentDictionary<Type, List<PropertyInfo>>;
+                    .GetValue(null) as ConcurrentDictionary<Type, List<DeltaProperty>>;
 
                 Assert.NotNull(propertyInfoCache);
                 Assert.Empty(propertyInfoCache);

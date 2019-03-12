@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace DeltaObjectGenerator.Extensions
 {
-    public static class TypeExtensions
+    internal static class TypeExtensions
     {
         public static bool IsDeltaInclude(this Type type, List<Type> acceptedNonPrimitives)
         {

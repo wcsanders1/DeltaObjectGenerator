@@ -1,5 +1,6 @@
 ﻿using DeltaObjectGenerator.Attributes;
 using DeltaObjectGenerator.Extensions;
+using DeltaObjectGenerator.Models;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -10,7 +11,7 @@ namespace DeltaObjectGenerator.Caches
 {
     internal static class TypeCache
     {
-        private static ConcurrentDictionary<Type, List<PropertyInfo>> DeltaPropertiesByType { get; }
+        private static ConcurrentDictionary<Type, List<DeltaProperty>> DeltaPropertiesByType { get; }
         private static ConcurrentDictionary<Type, List<PropertyInfo>> PropertiesToIgnoreWhenDefaultByType { get; }
 
         private static readonly Dictionary<Type, string> StringifiedDefaultValuesByType = 
@@ -47,11 +48,11 @@ namespace DeltaObjectGenerator.Caches
 
         static TypeCache()
         {
-            DeltaPropertiesByType = new ConcurrentDictionary<Type, List<PropertyInfo>>();
+            DeltaPropertiesByType = new ConcurrentDictionary<Type, List<DeltaProperty>>();
             PropertiesToIgnoreWhenDefaultByType = new ConcurrentDictionary<Type, List<PropertyInfo>>();
         }
 
-        public static List<PropertyInfo> GetDeltaPropertyInfo<T>()
+        public static List<DeltaProperty> GetDeltaPropertyInfo<T>()
         {
             var type = typeof(T);
             if (DeltaPropertiesByType.TryGetValue(type, out var cachedPropertyInfo))
@@ -59,7 +60,7 @@ namespace DeltaObjectGenerator.Caches
                 return cachedPropertyInfo;
             }
 
-            var propertyInfo = type
+            var deltaProperties = type
                 .GetProperties()
                 .Select(pi => 
                 {
@@ -68,14 +69,18 @@ namespace DeltaObjectGenerator.Caches
                         return null;
                     }
 
-                    return pi.PropertyType.IsDeltaInclude(AcceptedNonPrimitiveTypes) ? pi : null;
+                    return pi.PropertyType.IsDeltaInclude(AcceptedNonPrimitiveTypes) ? 
+                        new DeltaProperty
+                        {
+                            PropertyInfo = pi
+                        } : null;
                 })
-                .Where(pi => pi != null)
+                .Where(dp => dp != null)
                 .ToList();
 
-            DeltaPropertiesByType.AddOrUpdate(type, propertyInfo, (_, pi) => pi);
+            DeltaPropertiesByType.AddOrUpdate(type, deltaProperties, (_, dps) => deltaProperties);
 
-            return propertyInfo;
+            return deltaProperties;
         }
 
         public static List<PropertyInfo> GetPropertiesToIgnoreOnDefault<T>()
@@ -97,6 +102,7 @@ namespace DeltaObjectGenerator.Caches
             return propertiesToNotUpdateWhenNull;
         }
 
+        //TODO1: Does this work right for nullables?
         public static string GetStringifiedDefaultValueForType(Type type)
         {
             if (!type.IsValueType)
