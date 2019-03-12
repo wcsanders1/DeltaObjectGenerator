@@ -1,4 +1,5 @@
 ﻿using DeltaObjectGenerator.Attributes;
+using DeltaObjectGenerator.Extensions;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -67,16 +68,7 @@ namespace DeltaObjectGenerator.Caches
                         return null;
                     }
 
-                    var pType = pi.PropertyType;
-                    if (Nullable.GetUnderlyingType(pType) != null || 
-                        pType.IsPrimitive || 
-                        pType.IsEnum || 
-                        AcceptedNonPrimitiveTypes.Contains(pType))
-                    {
-                        return pi;
-                    }
-
-                    return null;
+                    return pi.PropertyType.IsDeltaInclude(AcceptedNonPrimitiveTypes) ? pi : null;
                 })
                 .Where(pi => pi != null)
                 .ToList();
