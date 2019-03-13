@@ -174,6 +174,30 @@ namespace DeltaObjectGeneratorTests.Unit
                 Assert.Equal(newCustomer.Age.ToString(), deltaObjects.First(o => o.PropertyName ==
                     nameof(TestCustomerWithNullable.Age)).NewValue);
             }
+
+            [Fact]
+            public void ReturnsObjectWithAlias_WhenPropertyAliased()
+            {
+                var originalCustomer = new TestCustomerWithAlias
+                {
+                    FirstName = "original first name",
+                    LastName = "original last name"
+                };
+
+                var newCustomer = new TestCustomerWithAlias
+                {
+                    FirstName = "new first name",
+                    LastName = "new last name"
+                };
+
+                var deltaObjects = DeltaObjectFromObjectGenerator.GetDeltaObject(originalCustomer, newCustomer);
+
+                Assert.Equal(2, deltaObjects.Count);
+                Assert.Equal("last_name", deltaObjects.First(o => o.PropertyName == 
+                    (nameof(TestCustomerWithAlias.LastName))).PropertyAlias);
+                Assert.Equal(nameof(TestCustomerWithAlias.FirstName), deltaObjects.First(o => o.PropertyName ==
+                    (nameof(TestCustomerWithAlias.FirstName))).PropertyAlias);
+            }
         }
     }
 }
