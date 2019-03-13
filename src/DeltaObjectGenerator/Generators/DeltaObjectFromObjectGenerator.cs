@@ -29,10 +29,7 @@ namespace DeltaObjectGenerator.Geneators
                     deltaObjects.Add(new DeltaObject
                     {
                         PropertyName = propertyInfo.Name,
-                        
-                        //TODO1: Make this respect a custom attribute
-                        PropertyAlias = propertyInfo.Name,
-
+                        PropertyAlias = deltaProperty.Alias,
                         OriginalValue = originalValueStr,
                         NewValue = newValueStr
                     });

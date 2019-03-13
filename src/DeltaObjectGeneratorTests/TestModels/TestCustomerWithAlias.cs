@@ -7,7 +7,7 @@ namespace DeltaObjectGeneratorTests.TestModels
     {
         public string FirstName { get; set; }
 
-        [DeltaObjectAlias("first_name")]
+        [DeltaObjectAlias("last_name")]
         public string LastName { get; set; }
 
         public int Age { get; set; }

@@ -72,7 +72,8 @@ namespace DeltaObjectGenerator.Caches
                     return pi.PropertyType.IsDeltaInclude(AcceptedNonPrimitiveTypes) ? 
                         new DeltaProperty
                         {
-                            PropertyInfo = pi
+                            PropertyInfo = pi,
+                            Alias = pi.GetAlias() ?? pi.Name
                         } : null;
                 })
                 .Where(dp => dp != null)
