@@ -123,9 +123,9 @@ namespace DeltaObjectGeneratorTests.Unit
                 var deltaObjects = DeltaObjectFromObjectGenerator.GetDeltaObject(originalCustomer, newCustomer);
 
                 Assert.Equal(2, deltaObjects.Count);
-                Assert.Equal(newCustomer.Salary.ToString(), deltaObjects.First(o => o.PropertyName ==
+                Assert.Equal(newCustomer.Salary, deltaObjects.First(o => o.PropertyName ==
                     nameof(TestCustomerWithNullable.Salary)).NewValue);
-                Assert.Equal(newCustomer.Age.ToString(), deltaObjects.First(o => o.PropertyName ==
+                Assert.Equal(newCustomer.Age, deltaObjects.First(o => o.PropertyName ==
                     nameof(TestCustomerWithNullable.Age)).NewValue);
             }
 
@@ -149,7 +149,7 @@ namespace DeltaObjectGeneratorTests.Unit
                 Assert.Equal(2, deltaObjects.Count);
                 Assert.Null(deltaObjects.First(o => o.PropertyName ==
                     nameof(TestCustomerWithNullable.Salary)).NewValue);
-                Assert.Equal(newCustomer.Age.ToString(), deltaObjects.First(o => o.PropertyName ==
+                Assert.Equal(newCustomer.Age, deltaObjects.First(o => o.PropertyName ==
                     nameof(TestCustomerWithNullable.Age)).NewValue);
             }
 
@@ -171,7 +171,7 @@ namespace DeltaObjectGeneratorTests.Unit
                 var deltaObjects = DeltaObjectFromObjectGenerator.GetDeltaObject(originalCustomer, newCustomer);
 
                 Assert.Single(deltaObjects);
-                Assert.Equal(newCustomer.Age.ToString(), deltaObjects.First(o => o.PropertyName ==
+                Assert.Equal(newCustomer.Age, deltaObjects.First(o => o.PropertyName ==
                     nameof(TestCustomerWithNullable.Age)).NewValue);
             }
 

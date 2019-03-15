@@ -13,25 +13,29 @@ namespace DeltaObjectGenerator.Geneators
             var deltaProperties = TypeCache.GetDeltaPropertyInfo<T>();
             var propertiesToIgnoreOnDefault = TypeCache.GetPropertiesToIgnoreOnDefault<T>();
             var deltaObjects = new List<DeltaObject>();
-
+            
             foreach (var deltaProperty in deltaProperties)
             {
                 var propertyInfo = deltaProperty.PropertyInfo;
+                var newValue = propertyInfo.GetValue(newObject);
                 var newValueStr = propertyInfo.GetValue(newObject)?.ToString();
                 if (propertyInfo.IgnoreDelta(propertiesToIgnoreOnDefault, newValueStr))
                 {
                     continue;
                 }
 
+                var originalValue = deltaProperty.PropertyInfo.GetValue(originalObject);
                 var originalValueStr = deltaProperty.PropertyInfo.GetValue(originalObject)?.ToString();
-                if (!string.Equals(originalValueStr, newValueStr, StringComparison.InvariantCulture))
+                if (deltaProperty.HasDelta(originalValue, newValue))
                 {
                     deltaObjects.Add(new DeltaObject
                     {
                         PropertyName = propertyInfo.Name,
                         PropertyAlias = deltaProperty.Alias,
-                        OriginalValue = originalValueStr,
-                        NewValue = newValueStr
+                        OriginalValue = originalValue,
+                        NewValue = newValue,
+                        StringifiedOriginalValue = originalValue?.ToString(),
+                        StringifiedNewValue = newValue?.ToString()
                     });
                 }
             }
