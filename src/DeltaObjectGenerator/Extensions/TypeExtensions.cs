@@ -13,5 +13,16 @@ namespace DeltaObjectGenerator.Extensions
                 type.IsEnum ||
                 acceptedNonPrimitives.Contains(type);
         }
+
+        // TODO: Maybe this should just return the default value rather than IComparable
+        public static IComparable GetComparableDefaultValue(this Type type)
+        {
+            if (!type.IsValueType)
+            {
+                return null;
+            }
+
+            return Activator.CreateInstance(type) as IComparable;
+        }
     }
 }

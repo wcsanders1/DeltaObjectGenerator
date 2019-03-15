@@ -1,7 +1,6 @@
 ﻿using DeltaObjectGenerator.Caches;
 using DeltaObjectGenerator.Extensions;
 using DeltaObjectGenerator.Models;
-using System;
 using System.Collections.Generic;
 
 namespace DeltaObjectGenerator.Geneators
@@ -18,8 +17,7 @@ namespace DeltaObjectGenerator.Geneators
             {
                 var propertyInfo = deltaProperty.PropertyInfo;
                 var newValue = propertyInfo.GetValue(newObject);
-                var newValueStr = propertyInfo.GetValue(newObject)?.ToString();
-                if (propertyInfo.IgnoreDelta(propertiesToIgnoreOnDefault, newValueStr))
+                if (propertyInfo.IgnoreDeltaOnDefault(propertiesToIgnoreOnDefault, newValue))
                 {
                     continue;
                 }

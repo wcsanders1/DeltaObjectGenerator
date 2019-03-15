@@ -1,5 +1,5 @@
 ﻿using DeltaObjectGenerator.Attributes;
-using DeltaObjectGenerator.Caches;
+using System;
 using System.Collections.Generic;
 using System.Reflection;
 
@@ -7,15 +7,22 @@ namespace DeltaObjectGenerator.Extensions
 {
     internal static class PropertyInfoExtensions
     {
-        public static bool IgnoreDelta(this PropertyInfo propertyInfo,
-            List<PropertyInfo> propertiesToNotUpdateWhenDefault, string stringifiedNewValue)
+        public static bool IgnoreDeltaOnDefault(this PropertyInfo propertyInfo,
+            List<PropertyInfo> propertiesToIgnoreOnDefault, object newValue)
         {
-            if (propertiesToNotUpdateWhenDefault.Contains(propertyInfo))
+            if (!propertiesToIgnoreOnDefault.Contains(propertyInfo))
             {
-                return TypeCache.GetStringifiedDefaultValueForType(propertyInfo.PropertyType) == stringifiedNewValue;
+                return false;
             }
 
-            return false;
+            if (!(newValue is IComparable comparableNewValue) || comparableNewValue == null)
+            {
+                return true;
+            }
+
+            var comparableDefaultValue = propertyInfo.PropertyType.GetComparableDefaultValue();
+
+            return comparableNewValue.CompareTo(comparableDefaultValue) == 0;
         }
 
         public static string GetAlias(this PropertyInfo propertyInfo)
