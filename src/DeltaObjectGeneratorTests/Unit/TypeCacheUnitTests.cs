@@ -48,7 +48,6 @@ namespace DeltaObjectGeneratorTests.Unit
                     .GetValue(null) as ConcurrentDictionary<Type, List<DeltaProperty>>;
 
                 Assert.NotNull(propertyInfoCache);
-                Assert.Empty(propertyInfoCache);
 
                 var customerPropertiesFirstCall = TypeCache.GetDeltaPropertyInfo<TestCustomer>();
 
