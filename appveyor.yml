@@ -16,7 +16,7 @@ nuget:
 
 build:
   publish_nuget: true
-  verbosity: detailed
+  verbosity: minimal
 
 test_script:
   - dotnet test /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:Exclude="[xunit*]*" ./src/DeltaObjectGeneratorTests/DeltaObjectGeneratorTests.csproj
