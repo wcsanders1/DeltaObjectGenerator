@@ -1,0 +1,23 @@
+version: 0.1.0.{build}-alpha.1
+
+branches:
+  only:
+    - master
+
+image: Visual Studio 2017
+
+before_build:
+  - dotnet tool install -g coveralls.net --version 1.0.0
+  - nuget restore ./src
+
+nuget:
+  account_feed: true
+  project_feed: true
+
+build:
+  publish_nuget: true
+  verbosity: minimal
+
+test_script:
+  - dotnet test /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:Exclude="[xunit*]*" ./src/DeltaObjectGeneratorTests/DeltaObjectGeneratorTests.csproj
+  - csmacnz.coveralls --opencover --useRelativePaths -i C:\projects\deltaobjectgenerator\src\DeltaObjectGeneratorTests\coverage.opencover.xml
