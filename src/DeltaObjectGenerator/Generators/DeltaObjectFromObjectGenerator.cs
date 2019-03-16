@@ -2,6 +2,8 @@
 using DeltaObjectGenerator.Extensions;
 using DeltaObjectGenerator.Models;
 using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 
 namespace DeltaObjectGenerator.Geneators
 {
@@ -11,33 +13,38 @@ namespace DeltaObjectGenerator.Geneators
         {
             var deltaProperties = TypeCache.GetDeltaPropertyInfo<T>();
             var propertiesToIgnoreOnDefault = TypeCache.GetPropertiesToIgnoreOnDefault<T>();
-            var deltaObjects = new List<DeltaObject>();
             
-            foreach (var deltaProperty in deltaProperties)
-            {
-                var propertyInfo = deltaProperty.PropertyInfo;
-                var newValue = propertyInfo.GetValue(newObject, null);
-                if (propertyInfo.IgnoreDeltaBecauseDefault(propertiesToIgnoreOnDefault, newValue))
-                {
-                    continue;
-                }
+            return deltaProperties.Select(deltaProperty => 
+                GetDeltaObject(deltaProperty, originalObject, newObject, propertiesToIgnoreOnDefault))
+            .Where(d => d != null)
+            .ToList();
+        }
 
-                var originalValue = deltaProperty.PropertyInfo.GetValue(originalObject);
-                if (deltaProperty.HasDelta(originalValue, newValue))
-                {
-                    deltaObjects.Add(new DeltaObject
-                    {
-                        PropertyName = propertyInfo.Name,
-                        PropertyAlias = deltaProperty.Alias,
-                        OriginalValue = originalValue,
-                        NewValue = newValue,
-                        StringifiedOriginalValue = originalValue?.ToString(),
-                        StringifiedNewValue = newValue?.ToString()
-                    });
-                }
+        private static DeltaObject GetDeltaObject<T>(DeltaProperty deltaProperty, T originalObject, 
+            T newObject, List<PropertyInfo> propertiesToIgnoreOnDefault)
+        {
+            var propertyInfo = deltaProperty.PropertyInfo;
+            var newValue = propertyInfo.GetValue(newObject, null);
+            if (propertyInfo.IgnoreDeltaBecauseDefault(propertiesToIgnoreOnDefault, newValue))
+            {
+                return null;
             }
 
-            return deltaObjects;
+            var originalValue = deltaProperty.PropertyInfo.GetValue(originalObject);
+            if (deltaProperty.HasDelta(originalValue, newValue))
+            {
+                return new DeltaObject
+                {
+                    PropertyName = propertyInfo.Name,
+                    PropertyAlias = deltaProperty.Alias,
+                    OriginalValue = originalValue,
+                    NewValue = newValue,
+                    StringifiedOriginalValue = originalValue?.ToString(),
+                    StringifiedNewValue = newValue?.ToString()
+                };
+            }
+
+            return null;
         }
     }
 }
