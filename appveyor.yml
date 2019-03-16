@@ -19,5 +19,5 @@ build:
   verbosity: minimal
 
 test_script:
-  - dotnet test /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:Exclude="[xunit*]*" ./src/DeltaObjectGeneratorTests/DeltaObjectGeneratorTests.csproj
+  - dotnet test --filter Category=Unit /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:Exclude="[xunit*]*" ./src/DeltaObjectGeneratorTests/DeltaObjectGeneratorTests.csproj
   - csmacnz.coveralls --opencover --useRelativePaths -i C:\projects\deltaobjectgenerator\src\DeltaObjectGeneratorTests\coverage.opencover.xml
