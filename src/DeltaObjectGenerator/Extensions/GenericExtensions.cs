@@ -8,7 +8,7 @@ namespace DeltaObjectGenerator.Extensions
     {
         public static List<DeltaObject> GetDeltaObject<T>(this T thisObject, T otherObject)
         {
-            return DeltaObjectFromObjectGenerator.GetDeltaObject(thisObject, otherObject);
+            return DeltaObjectFromObjectGenerator.GetDeltaObjects(thisObject, otherObject);
         }
     }
 }

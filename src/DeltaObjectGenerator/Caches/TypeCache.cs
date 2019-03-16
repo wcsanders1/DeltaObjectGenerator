@@ -47,6 +47,11 @@ namespace DeltaObjectGenerator.Caches
                         return null;
                     }
 
+                    if (pi.IsIndexed())
+                    {
+                        return null;
+                    }
+
                     return pi.PropertyType.IsDeltaInclude(AcceptedNonPrimitiveTypes) ? 
                         new DeltaProperty
                         {

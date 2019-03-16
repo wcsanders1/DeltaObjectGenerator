@@ -2,19 +2,13 @@
 
 namespace DeltaObjectGeneratorTests.TestModels
 {
-    internal class TestCustomer
+    public class TestCustomerWithFlagEnum
     {
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public int Age { get; set; }
+        public TestFlagEnum SomeFlagEnum { get; set; }
         public DateTime DateOfBirth { get; set; }
         public TestAccount Account { get; set; }
-
-        private string Secret { get; set; }
-
-        public void SetSecret(string secret)
-        {
-            Secret = secret;
-        }
     }
 }

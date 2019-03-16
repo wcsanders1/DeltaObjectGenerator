@@ -7,7 +7,7 @@ namespace DeltaObjectGenerator.Geneators
 {
     internal static class DeltaObjectFromObjectGenerator
     {
-        public static List<DeltaObject> GetDeltaObject<T>(T originalObject, T newObject)
+        public static List<DeltaObject> GetDeltaObjects<T>(T originalObject, T newObject)
         {
             var deltaProperties = TypeCache.GetDeltaPropertyInfo<T>();
             var propertiesToIgnoreOnDefault = TypeCache.GetPropertiesToIgnoreOnDefault<T>();
@@ -16,14 +16,13 @@ namespace DeltaObjectGenerator.Geneators
             foreach (var deltaProperty in deltaProperties)
             {
                 var propertyInfo = deltaProperty.PropertyInfo;
-                var newValue = propertyInfo.GetValue(newObject);
-                if (propertyInfo.IgnoreDeltaOnDefault(propertiesToIgnoreOnDefault, newValue))
+                var newValue = propertyInfo.GetValue(newObject, null);
+                if (propertyInfo.IgnoreDeltaBecauseDefault(propertiesToIgnoreOnDefault, newValue))
                 {
                     continue;
                 }
 
                 var originalValue = deltaProperty.PropertyInfo.GetValue(originalObject);
-                var originalValueStr = deltaProperty.PropertyInfo.GetValue(originalObject)?.ToString();
                 if (deltaProperty.HasDelta(originalValue, newValue))
                 {
                     deltaObjects.Add(new DeltaObject
