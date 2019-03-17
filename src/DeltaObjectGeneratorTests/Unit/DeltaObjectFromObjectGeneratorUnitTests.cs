@@ -196,7 +196,7 @@ namespace DeltaObjectGeneratorTests.Unit
                 var deltaObjects = DeltaObjectFromObjectGenerator.GetDeltaObjects(originalCustomer, newCustomer);
 
                 Assert.Equal(2, deltaObjects.Count);
-                Assert.Equal("last_name", deltaObjects.First(o => o.PropertyName == 
+                Assert.Equal("last_name", deltaObjects.First(o => o.PropertyName ==
                     (nameof(TestCustomerWithAlias.LastName))).PropertyAlias);
                 Assert.Equal(nameof(TestCustomerWithAlias.FirstName), deltaObjects.First(o => o.PropertyName ==
                     (nameof(TestCustomerWithAlias.FirstName))).PropertyAlias);
@@ -378,6 +378,89 @@ namespace DeltaObjectGeneratorTests.Unit
 
                 Assert.Single(deltaObjects);
             }
+
+            [Fact]
+            public void RecognizesDeltasOfPropertiesOnAbstractClass_WhenModelInheritsFromAbstractClass()
+            {
+                var originalCustomer = new TestCustomer
+                {
+                    FirstName = "original name",
+                    Address = "original address",
+                    Age = 34
+                };
+
+                var newCustomer = new TestCustomer
+                {
+                    FirstName = "new name",
+                    Address = "new address",
+                    Age = 34
+                };
+
+                var deltaObjects = DeltaObjectFromObjectGenerator.GetDeltaObjects(originalCustomer, newCustomer);
+
+                Assert.Equal(2, deltaObjects.Count);
+                Assert.Equal(newCustomer.Address, deltaObjects.First(o =>
+                    o.PropertyName == nameof(TestCustomer.Address)).NewValue);
+            }
+
+            [Fact]
+            public void RecognizesDeltasOfPropertiesOnPartialClass_WhenClassIsPartial()
+            {
+                var originalArtist = new TestPartialArtist
+                {
+                    IsGood = false,
+                    Name = "Picaso"
+                };
+
+                var newArtist = new TestPartialArtist
+                {
+                    IsGood = true,
+                    Name = "Picaso"
+                };
+
+                var deltaObjects = DeltaObjectFromObjectGenerator.GetDeltaObjects(originalArtist, newArtist);
+
+                Assert.Single(deltaObjects);
+                Assert.Equal(newArtist.IsGood, deltaObjects[0].NewValue);
+            }
+
+            [Fact]
+            public void DoesNotGenerateDeltaObjects_WhenAllValuesDefaultAndAllPropertiesHaveIgnoreOnDefaultAttribute()
+            {
+                var originalCustomer = new TestCustomerWithAllPropertiesIgnoreOnDefault
+                {
+                    FirstName = "goodName",
+                    LastName = "neatName",
+                    Age = 432,
+                    SomeStuff = TestEnum.SomethingMore,
+                    SomeFlagStuff = TestFlagEnum.SecondThing | TestFlagEnum.ThirdThing,
+                    DateOfBirth = new DateTime(1919, 10, 10),
+                    StartDate = new DateTime(1980, 11, 11)
+                };
+
+                var newCustomer = new TestCustomerWithAllPropertiesIgnoreOnDefault();
+
+                var deltaObjects = DeltaObjectFromObjectGenerator.GetDeltaObjects(originalCustomer, newCustomer);
+
+                Assert.NotNull(deltaObjects);
+                Assert.Empty(deltaObjects);
+            }
+
+            [Fact]
+            public void ReturnsOneDeltaObject_WhenNullableDateTimeDeltaExists()
+            {
+                var originalCustomer = new TestCustomerWithAllPropertiesIgnoreOnDefault();
+                var newCustomer = new TestCustomerWithAllPropertiesIgnoreOnDefault
+                {
+                    StartDate = new DateTime(1872, 1, 12)
+                };
+
+                var deltaObjects = DeltaObjectFromObjectGenerator.GetDeltaObjects(originalCustomer, newCustomer);
+
+                Assert.NotNull(deltaObjects);
+                Assert.Single(deltaObjects);
+                Assert.Equal(newCustomer.StartDate, deltaObjects[0].NewValue);
+            }    
         }
     }
 }

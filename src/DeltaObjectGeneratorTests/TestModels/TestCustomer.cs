@@ -2,7 +2,7 @@
 
 namespace DeltaObjectGeneratorTests.TestModels
 {
-    internal class TestCustomer
+    internal class TestCustomer : TestAbstractCustomer
     {
         public string FirstName { get; set; }
         public string LastName { get; set; }
