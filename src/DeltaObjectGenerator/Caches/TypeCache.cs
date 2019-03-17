@@ -12,7 +12,8 @@ namespace DeltaObjectGenerator.Caches
     internal static class TypeCache
     {
         private static ConcurrentDictionary<Type, List<DeltaProperty>> DeltaPropertiesByType { get; }
-        private static ConcurrentDictionary<Type, List<PropertyInfo>> PropertiesToIgnoreWhenDefaultByType { get; }
+        private static ConcurrentDictionary<Type, List<PropertyInfo>> PropertiesToIgnoreOnDefaultByType { get; }
+        private static ConcurrentDictionary<Type, bool> IgnorePropertiesOnDefaultByType { get; }
         
         private static readonly List<Type> AcceptedNonPrimitiveTypes = new List<Type>
         {
@@ -27,7 +28,23 @@ namespace DeltaObjectGenerator.Caches
         static TypeCache()
         {
             DeltaPropertiesByType = new ConcurrentDictionary<Type, List<DeltaProperty>>();
-            PropertiesToIgnoreWhenDefaultByType = new ConcurrentDictionary<Type, List<PropertyInfo>>();
+            PropertiesToIgnoreOnDefaultByType = new ConcurrentDictionary<Type, List<PropertyInfo>>();
+            IgnorePropertiesOnDefaultByType = new ConcurrentDictionary<Type, bool>();
+        }
+
+        public static bool IgnorePropertiesOnDefault<T>()
+        {
+            var type = typeof(T);
+            if (IgnorePropertiesOnDefaultByType.TryGetValue(type, out var ignore))
+            {
+                return ignore;
+            }
+
+            ignore = type.GetCustomAttribute<DeltaObjectIgnoreOnDefaultAttribute>() != null;
+
+            IgnorePropertiesOnDefaultByType.AddOrUpdate(type, ignore, (_, i) => ignore);
+
+            return ignore;
         }
 
         public static List<DeltaProperty> GetDeltaPropertyInfo<T>()
@@ -42,12 +59,8 @@ namespace DeltaObjectGenerator.Caches
                 .GetProperties()
                 .Select(pi => 
                 {
-                    if (Attribute.IsDefined(pi, typeof(DeltaObjectIgnoreAttribute)))
-                    {
-                        return null;
-                    }
-
-                    if (pi.IsIndexed())
+                    if (Attribute.IsDefined(pi, typeof(DeltaObjectIgnoreAttribute)) ||
+                        pi.IsIndexed())
                     {
                         return null;
                     }
@@ -70,7 +83,7 @@ namespace DeltaObjectGenerator.Caches
         public static List<PropertyInfo> GetPropertiesToIgnoreOnDefault<T>()
         {
             var type = typeof(T);
-            if (PropertiesToIgnoreWhenDefaultByType.TryGetValue(type, out var cachedPropertyInfo))
+            if (PropertiesToIgnoreOnDefaultByType.TryGetValue(type, out var cachedPropertyInfo))
             {
                 return cachedPropertyInfo;
             }
@@ -80,7 +93,7 @@ namespace DeltaObjectGenerator.Caches
                 .Where(pi => Attribute.IsDefined(pi, typeof(DeltaObjectIgnoreOnDefaultAttribute)))
                 .ToList();
 
-            PropertiesToIgnoreWhenDefaultByType.AddOrUpdate(type,
+            PropertiesToIgnoreOnDefaultByType.AddOrUpdate(type,
                 propertiesToNotUpdateWhenNull, (_, pi) => pi);
 
             return propertiesToNotUpdateWhenNull;

@@ -483,7 +483,65 @@ namespace DeltaObjectGeneratorTests.Unit
                 Assert.NotNull(deltaObjects);
                 Assert.Single(deltaObjects);
                 Assert.Equal(newCustomer.StartDate, deltaObjects[0].NewValue);
-            }    
+            }
+
+            [Fact]
+            public void IgnoresDefaultValues_WhenClassHasIgnoreOnDefaultAttribute()
+            {
+                var originalCustomer = new TestCustomerWithIgnoreOnDefaultAttributeOnClass
+                {
+                    FirstName = "goodName",
+                    LastName = "neatName",
+                    Age = 432,
+                    SomeStuff = TestEnum.SomethingMore,
+                    SomeFlagStuff = TestFlagEnum.SecondThing | TestFlagEnum.ThirdThing,
+                    DateOfBirth = new DateTime(1919, 10, 10),
+                    StartDate = new DateTime(1980, 11, 11)
+                };
+
+                var newCustomer = new TestCustomerWithIgnoreOnDefaultAttributeOnClass();
+
+                var deltaObjects = DeltaObjectFromObjectGenerator.GetDeltaObjects(originalCustomer, newCustomer);
+
+                Assert.NotNull(deltaObjects);
+                Assert.Empty(deltaObjects);
+            }
+
+            [Fact]
+            public void ReturnsDeltaObjectsForNonDefaultValues_WhenClassHasIgnoreOnDefaultAttribute()
+            {
+                var originalCustomer = new TestCustomerWithIgnoreOnDefaultAttributeOnClass
+                {
+                    FirstName = "goodName",
+                    LastName = "neatName",
+                    Age = 432,
+                    SomeStuff = TestEnum.SomethingMore,
+                    SomeFlagStuff = TestFlagEnum.SecondThing | TestFlagEnum.ThirdThing,
+                    DateOfBirth = new DateTime(1919, 10, 10),
+                    StartDate = new DateTime(1980, 11, 11)
+                };
+
+                var newCustomer = new TestCustomerWithIgnoreOnDefaultAttributeOnClass
+                {
+                    FirstName = "badName",
+                    Age = 12,
+                    SomeStuff = TestEnum.Nothing
+                };
+
+                var deltaObjects = DeltaObjectFromObjectGenerator.GetDeltaObjects(originalCustomer, newCustomer);
+
+                Assert.NotNull(deltaObjects);
+                Assert.Equal(3, deltaObjects.Count);
+                Assert.Equal(newCustomer.FirstName, deltaObjects.First(o =>
+                    o.PropertyName == nameof(TestCustomerWithIgnoreOnDefaultAttributeOnClass.FirstName))
+                    .NewValue);
+                Assert.Equal(newCustomer.Age, deltaObjects.First(o =>
+                    o.PropertyName == nameof(TestCustomerWithIgnoreOnDefaultAttributeOnClass.Age))
+                    .NewValue);
+                Assert.Equal(newCustomer.SomeStuff, deltaObjects.First(o =>
+                    o.PropertyName == nameof(TestCustomerWithIgnoreOnDefaultAttributeOnClass.SomeStuff))
+                    .NewValue);
+            }
 
             [Fact]
             public void ThrowsArgumentNullException_WhenFirstArgNull()

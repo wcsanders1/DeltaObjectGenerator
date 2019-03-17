@@ -9,9 +9,9 @@ namespace DeltaObjectGenerator.Extensions
     internal static class PropertyInfoExtensions
     {
         public static bool IgnoreDeltaBecauseDefault(this PropertyInfo propertyInfo,
-            List<PropertyInfo> propertiesToIgnoreOnDefault, object newValue)
+            List<PropertyInfo> propertiesToIgnoreOnDefault, object newValue, bool ignorePropertyOnDefault)
         {
-            if (!propertiesToIgnoreOnDefault.Contains(propertyInfo))
+            if (!propertiesToIgnoreOnDefault.Contains(propertyInfo) && !ignorePropertyOnDefault)
             {
                 return false;
             }

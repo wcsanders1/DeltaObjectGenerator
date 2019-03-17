@@ -24,19 +24,22 @@ namespace DeltaObjectGenerator.Geneators
 
             var deltaProperties = TypeCache.GetDeltaPropertyInfo<T>();
             var propertiesToIgnoreOnDefault = TypeCache.GetPropertiesToIgnoreOnDefault<T>();
+            var ignorePropertiesOnDefault = TypeCache.IgnorePropertiesOnDefault<T>();
             
             return deltaProperties.Select(deltaProperty => 
-                GetDeltaObject(deltaProperty, originalObject, newObject, propertiesToIgnoreOnDefault))
+                GetDeltaObject(deltaProperty, originalObject, newObject, 
+                    propertiesToIgnoreOnDefault, ignorePropertiesOnDefault))
             .Where(d => d != null)
             .ToList();
         }
 
         private static DeltaObject GetDeltaObject<T>(DeltaProperty deltaProperty, T originalObject, 
-            T newObject, List<PropertyInfo> propertiesToIgnoreOnDefault)
+            T newObject, List<PropertyInfo> propertiesToIgnoreOnDefault, bool ignorePropertiesOnDefault)
         {
             var propertyInfo = deltaProperty.PropertyInfo;
             var newValue = propertyInfo.GetValue(newObject);
-            if (propertyInfo.IgnoreDeltaBecauseDefault(propertiesToIgnoreOnDefault, newValue))
+            if (propertyInfo.IgnoreDeltaBecauseDefault(propertiesToIgnoreOnDefault, 
+                newValue, ignorePropertiesOnDefault))
             {
                 return null;
             }
