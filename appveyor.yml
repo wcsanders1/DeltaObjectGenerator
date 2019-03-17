@@ -1,4 +1,4 @@
-version: 0.1.0.{build}-alpha.1
+version: 0.1.0{build}
 
 branches:
   only:
@@ -21,3 +21,11 @@ build:
 test_script:
   - dotnet test --filter Category=Unit /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:Exclude="[xunit*]*" ./src/DeltaObjectGeneratorTests/DeltaObjectGeneratorTests.csproj
   - csmacnz.coveralls --opencover --useRelativePaths -i C:\projects\deltaobjectgenerator\src\DeltaObjectGeneratorTests\coverage.opencover.xml
+
+  deploy:
+  provider: NuGet
+  server:
+  api_key:
+    secure: hp46mSR3sfuUE4ICs+zWj3NHqXU840yF6tlT+iyezgj7jSUxwhIYh1XHdhCN1rhP
+  skip_symbols: true
+  artifact: /.*\.nupkg/
