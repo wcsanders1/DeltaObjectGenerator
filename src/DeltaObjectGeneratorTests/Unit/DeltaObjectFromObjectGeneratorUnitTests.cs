@@ -239,6 +239,29 @@ namespace DeltaObjectGeneratorTests.Unit
             }
 
             [Fact]
+            public void ReturnsFlagEnumDelta_WhenNewFlagPropertyHasFewerFlags()
+            {
+                var originalCustomer = new TestCustomerWithFlagEnum
+                {
+                    SomeFlagEnum = TestFlagEnum.OneThing | TestFlagEnum.SecondThing
+                };
+
+                var newCustomer = new TestCustomerWithFlagEnum
+                {
+                    SomeFlagEnum = TestFlagEnum.OneThing,
+                    FirstName = "newName"
+                };
+
+                var deltaObjects = DeltaObjectFromObjectGenerator.GetDeltaObjects(originalCustomer, newCustomer);
+
+                Assert.Equal(2, deltaObjects.Count);
+                Assert.Equal(newCustomer.SomeFlagEnum, deltaObjects.First(o =>
+                    o.PropertyName == nameof(TestCustomerWithFlagEnum.SomeFlagEnum)).NewValue);
+                Assert.Equal(newCustomer.FirstName, deltaObjects.First(o =>
+                    o.PropertyName == nameof(TestCustomerWithFlagEnum.FirstName)).NewValue);
+            }
+
+            [Fact]
             public void IgnoresArray_WhenPropertyHasArray()
             {
                 var originalCustomer = new TestCustomerWithArray
@@ -461,6 +484,20 @@ namespace DeltaObjectGeneratorTests.Unit
                 Assert.Single(deltaObjects);
                 Assert.Equal(newCustomer.StartDate, deltaObjects[0].NewValue);
             }    
+
+            [Fact]
+            public void ThrowsArgumentNullException_WhenFirstArgNull()
+            {
+                Assert.Throws<ArgumentNullException>(() => 
+                    DeltaObjectFromObjectGenerator.GetDeltaObjects(null, new TestCustomer()));
+            }
+
+            [Fact]
+            public void ThrowsArgumentNullException_WhenSecondArgNull()
+            {
+                Assert.Throws<ArgumentNullException>(() =>
+                    DeltaObjectFromObjectGenerator.GetDeltaObjects(new TestCustomer(), null));
+            }
         }
     }
 }

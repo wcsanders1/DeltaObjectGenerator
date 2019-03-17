@@ -1,6 +1,7 @@
 ﻿using DeltaObjectGenerator.Caches;
 using DeltaObjectGenerator.Extensions;
 using DeltaObjectGenerator.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -11,6 +12,16 @@ namespace DeltaObjectGenerator.Geneators
     {
         public static List<DeltaObject> GetDeltaObjects<T>(T originalObject, T newObject)
         {
+            if (originalObject == null)
+            {
+                throw new ArgumentNullException(nameof(originalObject));
+            }
+
+            if (newObject == null)
+            {
+                throw new ArgumentNullException(nameof(newObject));
+            }
+
             var deltaProperties = TypeCache.GetDeltaPropertyInfo<T>();
             var propertiesToIgnoreOnDefault = TypeCache.GetPropertiesToIgnoreOnDefault<T>();
             
@@ -24,7 +35,7 @@ namespace DeltaObjectGenerator.Geneators
             T newObject, List<PropertyInfo> propertiesToIgnoreOnDefault)
         {
             var propertyInfo = deltaProperty.PropertyInfo;
-            var newValue = propertyInfo.GetValue(newObject, null);
+            var newValue = propertyInfo.GetValue(newObject);
             if (propertyInfo.IgnoreDeltaBecauseDefault(propertiesToIgnoreOnDefault, newValue))
             {
                 return null;
