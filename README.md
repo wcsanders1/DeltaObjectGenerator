@@ -1,6 +1,6 @@
 # DeltaObjectGenerator
 
-[![Build status](https://ci.appveyor.com/api/projects/status/5hkp4iq90mwned3c?svg=true)](https://ci.appveyor.com/project/wcsanders1/deltaobjectgenerator) [![Coverage Status](https://coveralls.io/repos/github/wcsanders1/DeltaObjectGenerator/badge.svg?branch=master)](https://coveralls.io/github/wcsanders1/DeltaObjectGenerator?branch=master)
+[![Build status](https://ci.appveyor.com/api/projects/status/5hkp4iq90mwned3c?svg=true)](https://ci.appveyor.com/project/wcsanders1/deltaobjectgenerator) [![Coverage Status](https://coveralls.io/repos/github/wcsanders1/DeltaObjectGenerator/badge.svg?branch=master)](https://coveralls.io/github/wcsanders1/DeltaObjectGenerator?branch=master) ![Nuget](https://img.shields.io/nuget/v/deltaobjectgenerator.svg) ![Nuget](https://img.shields.io/nuget/dt/deltaobjectgenerator.svg)
 
 ## Overview
 
