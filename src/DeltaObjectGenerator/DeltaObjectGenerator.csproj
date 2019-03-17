@@ -2,6 +2,17 @@
 
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0;net45;net46;net461</TargetFrameworks>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <Version>0.1.0-alpha.2</Version>
+    <Authors>William Sanders</Authors>
+    <Company>William Sanders</Company>
+    <Description>Generates objects containing information about property deltas.</Description>
+    <Copyright>Copyright (c) 2019 William Sanders</Copyright>
+    <PackageLicenseUrl>https://github.com/wcsanders1/DeltaObjectGenerator/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/wcsanders1/DeltaObjectGenerator</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/wcsanders1/DeltaObjectGenerator</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>deltas object</PackageTags>
   </PropertyGroup>
 
 </Project>

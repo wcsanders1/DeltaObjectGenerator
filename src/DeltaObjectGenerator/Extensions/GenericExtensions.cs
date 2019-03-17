@@ -6,7 +6,7 @@ namespace DeltaObjectGenerator.Extensions
 {
     public static class GenericExtensions
     {
-        public static List<DeltaObject> GetDeltaObject<T>(this T thisObject, T otherObject)
+        public static List<DeltaObject> GetDeltaObjects<T>(this T thisObject, T otherObject)
         {
             return DeltaObjectFromObjectGenerator.GetDeltaObjects(thisObject, otherObject);
         }

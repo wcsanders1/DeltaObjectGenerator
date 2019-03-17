@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using Xunit;
+using Xunit.Abstractions;
 
 namespace DeltaObjectGeneratorTests.Manual
 {
@@ -13,8 +14,58 @@ namespace DeltaObjectGeneratorTests.Manual
         [Trait("Category", "Manual")]
         public class GetDeltaObjects
         {
+            private ITestOutputHelper Output { get; }
+
+            public GetDeltaObjects(ITestOutputHelper output)
+            {
+                Output = output;
+            }
+
             [Fact]
-            public void ProcessesOneMillionObjectsInLessThanFiveSeconds_WhenObjectsHaveFourDeltaProperties()
+            public void ProcessesOneThousandObjectsInFewerThanTwentyMilliseconds_WhenObjectsHaveFourDeltaProperties()
+            {
+                const int objectAmount = 1000;
+                var originalCustomers = new List<TestCustomer>();
+                var newCustomers = new List<TestCustomer>();
+
+                for (var i = 0; i < objectAmount; i++)
+                {
+                    originalCustomers.Add(new TestCustomer
+                    {
+                        FirstName = Guid.NewGuid().ToString(),
+                        LastName = Guid.NewGuid().ToString()
+                    });
+
+                    newCustomers.Add(new TestCustomer
+                    {
+                        FirstName = Guid.NewGuid().ToString(),
+                        LastName = Guid.NewGuid().ToString()
+                    });
+                }
+
+                var stopWatch = new Stopwatch();
+                var deltaObjects = new List<DeltaObject>();
+
+                stopWatch.Start();
+
+                for (var i = 0; i < objectAmount; i++)
+                {
+                    deltaObjects.AddRange(DeltaObjectFromObjectGenerator.GetDeltaObjects(originalCustomers[i], newCustomers[i]));
+                };
+
+                stopWatch.Stop();
+
+                Assert.Equal(objectAmount * 2, deltaObjects.Count);
+                Assert.True(stopWatch.Elapsed.Milliseconds < 20);
+
+                Output.WriteLine(
+                    $"Time: {stopWatch.Elapsed}\n" + 
+                    $"Milliseconds: {stopWatch.Elapsed.Milliseconds}\n" +
+                    $"Seconds: {stopWatch.Elapsed.Seconds}");
+            }
+
+            [Fact]
+            public void ProcessesOneMillionObjectsInFewerThanFiveSeconds_WhenObjectsHaveFourDeltaProperties()
             {
                 const int objectAmount = 1000000;
                 var originalCustomers = new List<TestCustomer>();
@@ -49,10 +100,15 @@ namespace DeltaObjectGeneratorTests.Manual
 
                 Assert.Equal(objectAmount * 2, deltaObjects.Count);
                 Assert.True(stopWatch.Elapsed.Seconds < 5);
+
+                Output.WriteLine(
+                    $"Time: {stopWatch.Elapsed}\n" +
+                    $"Milliseconds: {stopWatch.Elapsed.Milliseconds}\n" +
+                    $"Seconds: {stopWatch.Elapsed.Seconds}");
             }
 
             [Fact]
-            public void ProcessesOneMillionObjectsInLessThanTwentyFiveSeconds_WhenObjectsHaveTwentyDeltaProperties()
+            public void ProcessesOneMillionObjectsInFewerThanTwentyFiveSeconds_WhenObjectsHaveTwentyDeltaProperties()
             {
                 const int objectAmount = 1000000;
 
@@ -124,6 +180,11 @@ namespace DeltaObjectGeneratorTests.Manual
 
                 Assert.Equal(objectAmount * 20, deltaObjects.Count);
                 Assert.True(stopWatch.Elapsed.Seconds < 25);
+
+                Output.WriteLine(
+                    $"Time: {stopWatch.Elapsed}\n" +
+                    $"Milliseconds: {stopWatch.Elapsed.Milliseconds}\n" +
+                    $"Seconds: {stopWatch.Elapsed.Seconds}");
             }
         }
     }
