@@ -40,7 +40,7 @@ namespace DeltaObjectGenerator.Caches
                 return ignore;
             }
 
-            ignore = type.GetCustomAttribute<DeltaObjectIgnoreOnDefaultAttribute>() != null;
+            ignore = type.HasAttribute<DeltaObjectIgnoreOnDefaultAttribute>();
 
             IgnorePropertiesOnDefaultByType.AddOrUpdate(type, ignore, (_, i) => ignore);
 
@@ -56,11 +56,11 @@ namespace DeltaObjectGenerator.Caches
             }
 
             var deltaProperties = type
-                .GetProperties()
+                .GetTypeProperties()
                 .Select(pi => 
                 {
-                    if (Attribute.IsDefined(pi, typeof(DeltaObjectIgnoreAttribute)) ||
-                        pi.IsIndexed())
+
+                    if (pi.HasAttribute<DeltaObjectIgnoreAttribute>() || pi.IsIndexed())
                     {
                         return null;
                     }
@@ -89,8 +89,8 @@ namespace DeltaObjectGenerator.Caches
             }
 
             var propertiesToNotUpdateWhenNull = type
-                .GetProperties()
-                .Where(pi => Attribute.IsDefined(pi, typeof(DeltaObjectIgnoreOnDefaultAttribute)))
+                .GetTypeProperties()
+                .Where(pi => pi.HasAttribute<DeltaObjectIgnoreOnDefaultAttribute>())
                 .ToList();
 
             PropertiesToIgnoreOnDefaultByType.AddOrUpdate(type,

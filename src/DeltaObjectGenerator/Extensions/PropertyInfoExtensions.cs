@@ -37,5 +37,15 @@ namespace DeltaObjectGenerator.Extensions
                 .GetCustomAttribute<DeltaObjectAliasAttribute>()
                 ?.Alias;
         }
+
+        public static bool HasAttribute<T>(this PropertyInfo propertyInfo)
+            where T : Attribute
+        {
+#if NETSTANDARD1_6
+            return propertyInfo.GetCustomAttribute(typeof(T)) != null;
+#else
+            return Attribute.IsDefined(propertyInfo, typeof(T));
+#endif
+        }
     }
 }
