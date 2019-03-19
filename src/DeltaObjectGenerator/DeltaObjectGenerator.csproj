@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0;netstandard1.6;net45;net46;net461</TargetFrameworks>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>0.2.1-alpha.2</Version>
+    <Version>0.2.1</Version>
     <Authors>William Sanders</Authors>
     <Company>William Sanders</Company>
     <Description>Generates objects containing information about property deltas.</Description>
