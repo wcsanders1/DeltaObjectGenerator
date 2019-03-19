@@ -123,7 +123,7 @@ public class Customer
 {
     public string FirstName { get; set; }
 
-    [DeltaObjectAlias("first_name")]
+    [DeltaObjectAlias("last_name")]
     public string LastName { get; set; }
 }
 
@@ -143,7 +143,7 @@ var deltaObjects = originalCustomer.GetDeltaObject(newCustomerWithAlias);
 
 foreach (var deltaObject in deltaObjects)
 {
-    ConsoleS.WriteLine(
+    Console.WriteLine(
         $"Property name: {deltaObject.PropertyName}\n" +
         $"Property alias: {deltaObject.PropertyAlias}\n" +
         $"Original value: {deltaObject.OriginalValue}\n" +
