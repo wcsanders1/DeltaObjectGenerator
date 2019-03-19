@@ -2,11 +2,14 @@
 {
     public class DeltaObject
     {
-        public string PropertyName { get; set; }
-        public string PropertyAlias { get; set; }
-        public object OriginalValue { get; set; }
-        public object NewValue { get; set; }
-        public string StringifiedOriginalValue { get; set; }
-        public string StringifiedNewValue { get; set; }
+        public string PropertyName { get; internal set; }
+        public string PropertyAlias { get; internal set; }
+        public object OriginalValue { get; internal set; }
+        public object NewValue { get; internal set; }
+        public string StringifiedOriginalValue { get; internal set; }
+        public string StringifiedNewValue { get; internal set; }
+
+        internal DeltaObject()
+        {}
     }
 }
