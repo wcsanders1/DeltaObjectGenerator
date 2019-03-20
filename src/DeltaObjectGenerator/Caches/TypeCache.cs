@@ -59,7 +59,6 @@ namespace DeltaObjectGenerator.Caches
                 .GetTypeProperties()
                 .Select(pi => 
                 {
-
                     if (pi.HasAttribute<DeltaObjectIgnoreAttribute>() || pi.IsIndexed())
                     {
                         return null;
