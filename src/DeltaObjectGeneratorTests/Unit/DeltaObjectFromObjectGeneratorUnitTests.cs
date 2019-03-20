@@ -544,6 +544,19 @@ namespace DeltaObjectGeneratorTests.Unit
             }
 
             [Fact]
+            public void ReturnsEmptyList_WhenObjectHasNoProperties()
+            {
+                var propertylessCustomer = new TestCustomerWithoutProperties();
+
+                var deltaObjects = DeltaObjectFromObjectGenerator.GetDeltaObjects(propertylessCustomer,
+                    new TestCustomerWithoutProperties());
+
+                Assert.NotNull(deltaObjects);
+                Assert.IsType<List<DeltaObject>>(deltaObjects);
+                Assert.Empty(deltaObjects);
+            }
+
+            [Fact]
             public void ThrowsArgumentNullException_WhenFirstArgNull()
             {
                 Assert.Throws<ArgumentNullException>(() => 
