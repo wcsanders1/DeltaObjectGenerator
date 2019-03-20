@@ -20,6 +20,7 @@ namespace DeltaObjectGenerator.Generators
                 throw new ArgumentNullException(nameof(jObject));
             }
 
+
             return null;
         }
     }
