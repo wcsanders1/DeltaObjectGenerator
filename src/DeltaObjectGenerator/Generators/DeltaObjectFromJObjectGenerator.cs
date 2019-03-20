@@ -2,7 +2,6 @@
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace DeltaObjectGenerator.Generators
 {
@@ -19,7 +18,6 @@ namespace DeltaObjectGenerator.Generators
             {
                 throw new ArgumentNullException(nameof(jObject));
             }
-
 
             return null;
         }
