@@ -16,4 +16,8 @@
     <PackageIconUrl>https://raw.githubusercontent.com/wcsanders1/DeltaObjectGenerator/logo/logo.png</PackageIconUrl>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.1" />
+  </ItemGroup>
+
 </Project>
