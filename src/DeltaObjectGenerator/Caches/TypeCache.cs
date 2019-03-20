@@ -87,15 +87,15 @@ namespace DeltaObjectGenerator.Caches
                 return cachedPropertyInfo;
             }
 
-            var propertiesToNotUpdateWhenNull = type
+            var propertiesToIgnoreOnDefault = type
                 .GetTypeProperties()
                 .Where(pi => pi.HasAttribute<DeltaObjectIgnoreOnDefaultAttribute>())
                 .ToList();
 
             PropertiesToIgnoreOnDefaultByType.AddOrUpdate(type,
-                propertiesToNotUpdateWhenNull, (_, pi) => pi);
+                propertiesToIgnoreOnDefault, (_, pi) => pi);
 
-            return propertiesToNotUpdateWhenNull;
+            return propertiesToIgnoreOnDefault;
         }
     }
 }
