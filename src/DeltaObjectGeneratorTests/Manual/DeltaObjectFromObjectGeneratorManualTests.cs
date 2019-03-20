@@ -1,4 +1,4 @@
-﻿using DeltaObjectGenerator.Geneators;
+﻿using DeltaObjectGenerator.Generators;
 using DeltaObjectGenerator.Models;
 using DeltaObjectGeneratorTests.TestModels;
 using System;

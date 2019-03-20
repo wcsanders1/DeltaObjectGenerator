@@ -1,4 +1,4 @@
-﻿using DeltaObjectGenerator.Geneators;
+﻿using DeltaObjectGenerator.Generators;
 using DeltaObjectGenerator.Models;
 using System.Collections.Generic;
 
@@ -6,9 +6,9 @@ namespace DeltaObjectGenerator.Extensions
 {
     public static class GenericExtensions
     {
-        public static List<DeltaObject> GetDeltaObjects<T>(this T thisObject, T otherObject)
+        public static List<DeltaObject> GetDeltaObjects<T>(this T originalObject, T newObject)
         {
-            return DeltaObjectFromObjectGenerator.GetDeltaObjects(thisObject, otherObject);
+            return DeltaObjectFromObjectGenerator.GetDeltaObjects(originalObject, newObject);
         }
     }
 }
