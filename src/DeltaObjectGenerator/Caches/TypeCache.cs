@@ -4,6 +4,7 @@ using DeltaObjectGenerator.Models;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 
@@ -14,6 +15,7 @@ namespace DeltaObjectGenerator.Caches
         private static ConcurrentDictionary<Type, List<DeltaProperty>> DeltaPropertiesByType { get; }
         private static ConcurrentDictionary<Type, List<PropertyInfo>> PropertiesToIgnoreOnDefaultByType { get; }
         private static ConcurrentDictionary<Type, bool> IgnorePropertiesOnDefaultByType { get; }
+        private static ConcurrentDictionary<Type, TypeConverter> TypeConvertersByType { get; }
         
         private static readonly List<Type> AcceptedNonPrimitiveTypes = new List<Type>
         {
@@ -30,6 +32,22 @@ namespace DeltaObjectGenerator.Caches
             DeltaPropertiesByType = new ConcurrentDictionary<Type, List<DeltaProperty>>();
             PropertiesToIgnoreOnDefaultByType = new ConcurrentDictionary<Type, List<PropertyInfo>>();
             IgnorePropertiesOnDefaultByType = new ConcurrentDictionary<Type, bool>();
+            TypeConvertersByType = new ConcurrentDictionary<Type, TypeConverter>();
+        }
+
+        public static TypeConverter GetTypeConverter<T>()
+        {
+            var type = typeof(T);
+            if (TypeConvertersByType.TryGetValue(type, out var converter))
+            {
+                return converter;
+            }
+
+            converter = TypeDescriptor.GetConverter(type);
+
+            TypeConvertersByType.AddOrUpdate(type, converter, (_, c) => converter);
+
+            return converter;
         }
 
         public static bool IgnorePropertiesOnDefault<T>()
