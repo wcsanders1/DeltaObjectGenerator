@@ -8,6 +8,7 @@
         public object NewValue { get; internal set; }
         public string StringifiedOriginalValue { get; internal set; }
         public string StringifiedNewValue { get; internal set; }
+        public ConversionStatus ConversionStatus { get; internal set; }
 
         internal DeltaObject()
         {}
