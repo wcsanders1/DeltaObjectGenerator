@@ -595,20 +595,6 @@ namespace DeltaObjectGeneratorTests.Unit
                 Assert.IsType<List<DeltaObject>>(deltaObjects);
                 Assert.Empty(deltaObjects);
             }
-
-            [Fact]
-            public void ThrowsArgumentNullException_WhenFirstArgNull()
-            {
-                Assert.Throws<ArgumentNullException>(() => 
-                    DeltaObjectFromObjectGenerator.GetDeltaObjects(null, new TestCustomer()));
-            }
-
-            [Fact]
-            public void ThrowsArgumentNullException_WhenSecondArgNull()
-            {
-                Assert.Throws<ArgumentNullException>(() =>
-                    DeltaObjectFromObjectGenerator.GetDeltaObjects(new TestCustomer(), null));
-            }
         }
     }
 }

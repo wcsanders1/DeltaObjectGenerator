@@ -13,16 +13,6 @@ namespace DeltaObjectGenerator.Generators
     {
         public static List<DeltaObject> GetDeltaObjects<T>(T originalObject, JObject jObject)
         {
-            if (originalObject == null)
-            {
-                throw new ArgumentNullException(nameof(originalObject));
-            }
-
-            if (jObject == null)
-            {
-                throw new ArgumentNullException(nameof(jObject));
-            }
-
             var deltaProperties = TypeCache.GetDeltaPropertyInfo<T>();
             var propertiesToIgnoreOnDefault = TypeCache.GetPropertiesToIgnoreOnDefault<T>();
             var ignorePropertiesOnDefault = TypeCache.IgnorePropertiesOnDefault<T>();
@@ -30,8 +20,8 @@ namespace DeltaObjectGenerator.Generators
             return deltaProperties.Select(deltaProperty =>
                 GetDeltaObject(deltaProperty, originalObject, jObject,
                     propertiesToIgnoreOnDefault, ignorePropertiesOnDefault))
-            .Where(d => d != null)
-            .ToList();
+                .Where(d => d != null)
+                .ToList();
         }
 
         private static DeltaObject GetDeltaObject<T>(DeltaProperty deltaProperty, T originalObject,
