@@ -46,23 +46,30 @@ namespace DeltaObjectGenerator.Generators
 
             var originalValue = deltaProperty.PropertyInfo.GetValue(originalObject);
 
-            var typeConverter = TypeCache.GetTypeConverter<T>();
+            var typeConverter = TypeCache.GetTypeConverter(propertyInfo.PropertyType);
 
-            //if (!typeConverter.IsValid(newValue))
-            //{
-            //    return new DeltaObject
-            //    {
-            //        ConversionStatus = ConversionStatus.Invalid,
-            //        PropertyName = propertyInfo.Name,
-            //        PropertyAlias = deltaProperty.Alias,
-            //        OriginalValue = originalValue,
-            //        NewValue = newValue,
-            //        StringifiedOriginalValue = originalValue?.ToString(),
-            //        StringifiedNewValue = newValue?.ToString()
-            //    };
-            //}
+            var stringifiedNewValue = newValue.Type != JTokenType.Null ? 
+                newValue.ToString() : 
+                null;
 
-            var convertedNewValue = typeConverter.ConvertTo(newValue, propertyInfo.PropertyType);
+            if (!(newValue is JValue) || !typeConverter.IsValid(stringifiedNewValue))
+            {
+                return new DeltaObject
+                {
+                    ConversionStatus = ConversionStatus.Invalid,
+                    PropertyName = propertyInfo.Name,
+                    PropertyAlias = deltaProperty.Alias,
+                    OriginalValue = originalValue,
+                    NewValue = stringifiedNewValue,
+                    StringifiedOriginalValue = originalValue?.ToString(),
+                    StringifiedNewValue = stringifiedNewValue
+                };
+            }
+
+            var convertedNewValue = stringifiedNewValue != null ? 
+                typeConverter.ConvertFromString(stringifiedNewValue) : 
+                null;
+
             if (propertyInfo.IgnoreDeltaBecauseDefault(propertiesToIgnoreOnDefault,
                 convertedNewValue, ignorePropertiesOnDefault))
             {

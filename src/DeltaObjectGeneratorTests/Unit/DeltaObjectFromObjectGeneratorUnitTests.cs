@@ -36,6 +36,46 @@ namespace DeltaObjectGeneratorTests.Unit
             }
 
             [Fact]
+            public void ReturnsZeroDeltaObjects_WhenPropertiesAreNull()
+            {
+                var originalCustomer = new TestCustomer
+                {
+                    FirstName = default(string)
+                };
+
+                var newCustomer = new TestCustomer
+                {
+                    FirstName = default(string)
+                };
+
+                var deltaObjects = DeltaObjectFromObjectGenerator.GetDeltaObjects(originalCustomer, newCustomer);
+
+                Assert.NotNull(deltaObjects);
+                Assert.Empty(deltaObjects);
+            }
+
+            [Fact]
+            public void DetectsDelta_WhenStringEmptyAndIgnoreOnDefault()
+            {
+                var originalCustomer = new TestCustomerWithIgnoreOnDefaultAttributeOnClass
+                {
+                    FirstName = "originalFirstName"
+                };
+
+                var newCustomer = new TestCustomerWithIgnoreOnDefaultAttributeOnClass
+                {
+                    FirstName = string.Empty
+                };
+
+                var deltaObjects = DeltaObjectFromObjectGenerator.GetDeltaObjects(originalCustomer, newCustomer);
+
+                Assert.NotNull(deltaObjects);
+                Assert.Single(deltaObjects);
+                Assert.Equal(string.Empty, deltaObjects[0].NewValue);
+                Assert.Equal(ConversionStatus.Valid, deltaObjects[0].ConversionStatus);
+            }
+
+            [Fact]
             public void ReturnsObject_WithoutValueToIgnoreOnDefault()
             {
                 var originalCustomer = new TestCustomerWithDeltaObjectIgnoreOnDefaultAttribute

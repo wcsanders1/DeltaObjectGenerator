@@ -35,9 +35,8 @@ namespace DeltaObjectGenerator.Caches
             TypeConvertersByType = new ConcurrentDictionary<Type, TypeConverter>();
         }
 
-        public static TypeConverter GetTypeConverter<T>()
+        public static TypeConverter GetTypeConverter(Type type)
         {
-            var type = typeof(T);
             if (TypeConvertersByType.TryGetValue(type, out var converter))
             {
                 return converter;
