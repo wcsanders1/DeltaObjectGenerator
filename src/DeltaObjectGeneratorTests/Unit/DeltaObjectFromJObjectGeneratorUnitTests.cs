@@ -39,6 +39,30 @@ namespace DeltaObjectGeneratorTests.Unit
             }
 
             [Fact]
+            public void IgnoresProperty_IfNotInJObject()
+            {
+                var originalCustomer = new TestCustomer
+                {
+                    FirstName = "originalFirstName",
+                    LastName = "originalLastName"
+                };
+
+                var newCustomer = new
+                {
+                    FirstName = "newFirstName"
+                };
+
+                var newCustomerJObj = JObject.FromObject(newCustomer);
+
+                var deltaObjects = DeltaObjectFromJObjectGenerator.GetDeltaObjects(originalCustomer, newCustomerJObj);
+
+                Assert.NotNull(deltaObjects);
+                Assert.Single(deltaObjects);
+                Assert.Equal(ConversionStatus.Valid, deltaObjects[0].ConversionStatus);
+                Assert.Equal(newCustomer.FirstName, deltaObjects[0].NewValue);
+            }
+
+            [Fact]
             public void ReturnsSingleIntDeltaObject_WhenSingleIntDeltaExists()
             {
                 var originalCustomer = new TestCustomer
@@ -327,6 +351,172 @@ namespace DeltaObjectGeneratorTests.Unit
                 Assert.Single(deltaObjects);
                 Assert.Equal(string.Empty, deltaObjects[0].NewValue);
                 Assert.Equal(ConversionStatus.Valid, deltaObjects[0].ConversionStatus);
+            }
+
+            [Fact]
+            public void DetectsDelta_WhenPropertyIsEnum()
+            {
+                var originalCustomer = new TestCustomerWithEnum
+                {
+                    Age = 40,
+                    SomeEnum = TestEnum.Nothing
+                };
+
+                var newCustomer = new
+                {
+                    Age = 41,
+                    SomeEnum = TestEnum.Something
+                };
+
+                var newCustomerJObj = JObject.FromObject(newCustomer);
+
+                var deltaObjects = DeltaObjectFromJObjectGenerator.GetDeltaObjects(originalCustomer, newCustomerJObj);
+
+                Assert.NotNull(deltaObjects);
+                Assert.Equal(2, deltaObjects.Count);
+                Assert.Equal(ConversionStatus.Valid, deltaObjects.First(o =>
+                    o.PropertyName == nameof(TestCustomerWithEnum.Age)).ConversionStatus);
+                Assert.Equal(ConversionStatus.Valid, deltaObjects.First(o =>
+                    o.PropertyName == nameof(TestCustomerWithEnum.SomeEnum)).ConversionStatus);
+                Assert.Equal(newCustomer.Age, deltaObjects.First(o =>
+                    o.PropertyName == nameof(TestCustomerWithEnum.Age)).NewValue);
+                Assert.Equal(TestEnum.Something, deltaObjects.First(o =>
+                    o.PropertyName == nameof(TestCustomerWithEnum.SomeEnum)).NewValue);
+            }
+
+            [Fact]
+            public void DetectsDelta_WhenPropertyIsFlagEnum()
+            {
+                var originalCustomer = new TestCustomerWithFlagEnum
+                {
+                    SomeFlagEnum = TestFlagEnum.OneThing | TestFlagEnum.SecondThing
+                };
+
+                var newCustomer = new
+                {
+                    SomeNeedlessStupidProperty = "bad things",
+                    SomeFlagEnum = TestFlagEnum.OneThing | TestFlagEnum.ThirdThing
+                };
+
+                var newCustomerJObj = JObject.FromObject(newCustomer);
+
+                var deltaObjects = DeltaObjectFromJObjectGenerator.GetDeltaObjects(originalCustomer, newCustomerJObj);
+
+                Assert.NotNull(deltaObjects);
+                Assert.Single(deltaObjects);
+                Assert.Equal(ConversionStatus.Valid, deltaObjects.First(o =>
+                    o.PropertyName == nameof(TestCustomerWithFlagEnum.SomeFlagEnum)).ConversionStatus);
+                Assert.Equal(TestFlagEnum.OneThing | TestFlagEnum.ThirdThing, deltaObjects.First(o =>
+                    o.PropertyName == nameof(TestCustomerWithFlagEnum.SomeFlagEnum)).NewValue);
+            }
+
+            [Fact]
+            public void IgnoresDefaultFlagEnum_WhenClassHasIgnoreOnDefaultAttribute()
+            {
+                var originalCustomer = new TestCustomerWithIgnoreOnDefaultAttributeOnClass
+                {
+                    SomeFlagStuff = TestFlagEnum.OneThing | TestFlagEnum.SecondThing
+                };
+
+                var newCustomer = new
+                {
+                    SomeNeedlessStupidProperty = "bad things",
+                    SomeFlagStuff = TestFlagEnum.OneThing
+                };
+
+                var newCustomerJObj = JObject.FromObject(newCustomer);
+
+                var deltaObjects = DeltaObjectFromJObjectGenerator.GetDeltaObjects(originalCustomer, newCustomerJObj);
+
+                Assert.NotNull(deltaObjects);
+                Assert.Single(deltaObjects);
+            }
+
+            [Fact]
+            public void DetectsDeltaOnDefaultFlagEnum_WhenClassLacksIgnoreOnDefaultFlag()
+            {
+                var originalCustomer = new TestCustomerWithFlagEnum
+                {
+                    SomeFlagEnum = TestFlagEnum.OneThing | TestFlagEnum.SecondThing
+                };
+
+                var newCustomer = new
+                {
+                    SomeNeedlessStupidProperty = "bad things",
+                    SomeFlagEnum = TestFlagEnum.OneThing
+                };
+
+                var newCustomerJObj = JObject.FromObject(newCustomer);
+
+                var deltaObjects = DeltaObjectFromJObjectGenerator.GetDeltaObjects(originalCustomer, newCustomerJObj);
+
+                Assert.NotNull(deltaObjects);
+                Assert.Single(deltaObjects);
+                Assert.Equal(ConversionStatus.Valid, deltaObjects.First(o =>
+                    o.PropertyName == nameof(TestCustomerWithFlagEnum.SomeFlagEnum)).ConversionStatus);
+                Assert.Equal(TestFlagEnum.OneThing, deltaObjects.First(o =>
+                    o.PropertyName == nameof(TestCustomerWithFlagEnum.SomeFlagEnum)).NewValue);
+            }
+
+            [Fact]
+            public void DetectsDelta_WhenDeltaOnNullableProperty()
+            {
+                var originalCustomer = new TestCustomerWithNullable
+                {
+                    Account = new TestAccount
+                    {
+                        Balance = 123
+                    }
+                };
+
+                var newCustomer = new
+                {
+                    Account = new
+                    {
+                        Balance = 321
+                    },
+                    Salary = 12M
+                };
+
+                var newCustomerJObj = JObject.FromObject(newCustomer);
+
+                var deltaObjects = DeltaObjectFromJObjectGenerator.GetDeltaObjects(originalCustomer, newCustomerJObj);
+
+                Assert.NotNull(deltaObjects);
+                Assert.Single(deltaObjects);
+                Assert.Equal(ConversionStatus.Valid, deltaObjects.First(o =>
+                    o.PropertyName == nameof(TestCustomerWithNullable.Salary)).ConversionStatus);
+                Assert.Equal(newCustomer.Salary, deltaObjects.First(o =>
+                    o.PropertyName == nameof(TestCustomerWithNullable.Salary)).NewValue);
+            }
+
+            [Fact]
+            public void DoesNotDetectFalseDelta_WhenDecimalUnchanged()
+            {
+                var originalCustomer = new TestCustomerWithNullable
+                {
+                    Account = new TestAccount
+                    {
+                        Balance = 123
+                    },
+                    Salary = 12
+                };
+
+                var newCustomer = new
+                {
+                    Account = new
+                    {
+                        Balance = 321
+                    },
+                    Salary = 12
+                };
+
+                var newCustomerJObj = JObject.FromObject(newCustomer);
+
+                var deltaObjects = DeltaObjectFromJObjectGenerator.GetDeltaObjects(originalCustomer, newCustomerJObj);
+
+                Assert.NotNull(deltaObjects);
+                Assert.Empty(deltaObjects);
             }
         }
     }

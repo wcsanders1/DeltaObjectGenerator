@@ -45,14 +45,19 @@ namespace DeltaObjectGenerator.Generators
             }
 
             var originalValue = deltaProperty.PropertyInfo.GetValue(originalObject);
-
             var typeConverter = TypeCache.GetTypeConverter(propertyInfo.PropertyType);
-
             var stringifiedNewValue = newValue.Type != JTokenType.Null ? 
                 newValue.ToString() : 
                 null;
-
-            if (!(newValue is JValue) || !typeConverter.IsValid(stringifiedNewValue))
+            
+            object convertedNewValue;
+            try
+            {
+                convertedNewValue = stringifiedNewValue != null ?
+                    typeConverter.ConvertFromString(stringifiedNewValue) :
+                    null;
+            }
+            catch (Exception)
             {
                 return new DeltaObject
                 {
@@ -65,10 +70,6 @@ namespace DeltaObjectGenerator.Generators
                     StringifiedNewValue = stringifiedNewValue
                 };
             }
-
-            var convertedNewValue = stringifiedNewValue != null ? 
-                typeConverter.ConvertFromString(stringifiedNewValue) : 
-                null;
 
             if (propertyInfo.IgnoreDeltaBecauseDefault(propertiesToIgnoreOnDefault,
                 convertedNewValue, ignorePropertiesOnDefault))
