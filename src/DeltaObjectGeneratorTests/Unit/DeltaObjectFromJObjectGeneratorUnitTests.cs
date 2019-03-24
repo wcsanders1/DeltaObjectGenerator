@@ -63,6 +63,30 @@ namespace DeltaObjectGeneratorTests.Unit
             }
 
             [Fact]
+            public void IsCaseInsensitive_WhenDetectingDelta()
+            {
+                var originalCustomer = new TestCustomer
+                {
+                    FirstName = "originalFirstName",
+                    LastName = "originalLastName"
+                };
+
+                var newCustomer = new
+                {
+                    firstName = "newFirstName"
+                };
+
+                var newCustomerJObj = JObject.FromObject(newCustomer);
+
+                var deltaObjects = DeltaObjectFromJObjectGenerator.GetDeltaObjects(originalCustomer, newCustomerJObj);
+
+                Assert.NotNull(deltaObjects);
+                Assert.Single(deltaObjects);
+                Assert.Equal(ConversionStatus.Valid, deltaObjects[0].ConversionStatus);
+                Assert.Equal(newCustomer.firstName, deltaObjects[0].NewValue);
+            }
+
+            [Fact]
             public void ReturnsSingleIntDeltaObject_WhenSingleIntDeltaExists()
             {
                 var originalCustomer = new TestCustomer

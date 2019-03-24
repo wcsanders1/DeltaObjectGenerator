@@ -9,6 +9,7 @@
 - [Examples](#examples)
   - [Calculating deltas using two objects of the same type](#same-type)
   - [Calculating deltas using an object and `JObject`](#jobject)
+    - [Case sensitivity](#case-sensitivity)
 - [Attributes](#attributes)
   - [`DeltaObjectAlias`](#delta-object-alias)
   - [`DeltaObjectIgnore`](#delta-object-ignore)
@@ -52,7 +53,7 @@ A `DeltaObject` is generated **only** for non-indexed properties of the followin
 - nullables, e.g., `int?`, `DateTime?`
 - enums
 
-Any property on an object not among the above types will be ignored by the delta-object generator. In addition, you may add attributes to properties or to a class to have the delta-object generator ignore certain properties in certain situations, discussed below.
+Any property on an object not among the above types will be ignored by the delta-object generator. In addition, you may add attributes to properties or to a class to have the delta-object generator ignore certain properties in certain situations, discussed below in the [attributes](#attributes) section.
 
 ## <a id="examples">Examples</a>
 
@@ -195,6 +196,10 @@ Conversion status: Valid
 ```
 
 Notice that the conversion status of the new value for the `Transactions` property is `Invalid` because the `string` "fifty" cannot be converted into an `int`.
+
+##### <a id="case-sensitivity">Case sensitivity</a>
+
+Properties on an object are associated with `JObject` properties without regard to casing. Therefore, the above example would produce the same result if the property on the `JObject` were `firstname` rather than `FirstName`.
 
 ## <a id="attributes">Attributes</a>
 

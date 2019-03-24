@@ -29,7 +29,13 @@ namespace DeltaObjectGenerator.Generators
         {
             var propertyInfo = deltaProperty.PropertyInfo;
 
-            if (!jObject.TryGetValue(propertyInfo.Name, out var newValue))
+            if (!jObject.TryGetValue(propertyInfo.Name,
+#if NETSTANDARD1_6
+                StringComparison.CurrentCultureIgnoreCase,
+#else
+                StringComparison.InvariantCultureIgnoreCase,
+#endif
+                out var newValue))
             {
                 return null;
             }
