@@ -30,8 +30,6 @@ Compatible with the following:
 
 ## <a id="details">Details</a>
 
-### The `DeltaObject`
-
 The extension method `GetDeltaObjects` returns a `List<DeltaObject>`. A `DeltaObject` has the following public properties concerning a property with a delta:
 
 - `PropertyName` The name of the property.
@@ -198,7 +196,7 @@ Conversion status: Valid
 
 Notice that the conversion status of the new value for the `Transactions` property is `Invalid` because the `string` "fifty" cannot be converted into an `int`.
 
-### <a id="attributes">Attributes</a>
+## <a id="attributes">Attributes</a>
 
 #### <a id="delta-object-alias">`DeltaObjectAlias`</a>
 
@@ -266,7 +264,7 @@ This attribute can be applied to a property to force the delta-object generator 
 
 This attribute can be applied to a property to force the delta-object generator to ignore that property when its value is equal to the property type's default value. This attribute can also be applied to a class, which will force the delta-object generator to ignore all properties on the class whose value is default.
 
-### <a id="performance">Performance</a>
+## <a id="performance">Performance</a>
 
 The delta-object generator uses reflection to get information about a type and, for the sake of performance, caches the results in a static class. Below are some performance measurements observed on an i7-6700 4.00GHz CPU without running operations in parallel (note that the "Properties on Object" column counts only those properties that the delta-object generator does not ignore):
 
