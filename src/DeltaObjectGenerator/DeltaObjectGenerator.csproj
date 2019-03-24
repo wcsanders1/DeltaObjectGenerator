@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0;netstandard1.6;net45;net46;net461</TargetFrameworks>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>0.2.1</Version>
+    <Version>0.3.3</Version>
     <Authors>William Sanders</Authors>
     <Company>William Sanders</Company>
     <Description>Generates objects containing information about property deltas.</Description>
@@ -12,8 +12,13 @@
     <PackageProjectUrl>https://github.com/wcsanders1/DeltaObjectGenerator</PackageProjectUrl>
     <RepositoryUrl>https://github.com/wcsanders1/DeltaObjectGenerator</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
-    <PackageTags>deltas object</PackageTags>
+    <PackageTags>deltas object jobject</PackageTags>
     <PackageIconUrl>https://raw.githubusercontent.com/wcsanders1/DeltaObjectGenerator/logo/logo.png</PackageIconUrl>
+    <AssemblyVersion>0.3.3.0</AssemblyVersion>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|netstandard2.0|AnyCPU'">
+    <DocumentationFile>C:\Users\William Sanders\Documents\GitHubRepos\DeltaObjectGenerator\src\DeltaObjectGenerator\DeltaObjectGenerator.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>

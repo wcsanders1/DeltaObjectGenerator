@@ -6,8 +6,19 @@ using System.Collections.Generic;
 
 namespace DeltaObjectGenerator.Extensions
 {
+    /// <summary>
+    /// A class offering extension methods to generate a <see cref="List{DeltaObject}"/>.
+    /// </summary>
     public static class GenericExtensions
     {
+        /// <summary>
+        /// Returns a <see cref="List{DeltaObject}"/>, which will be empty if there are no deltas.
+        /// </summary>
+        /// <typeparam name="T">Any type.</typeparam>
+        /// <param name="originalObject">A type of <typeparamref name="T"/>.</param>
+        /// <param name="newObject">A type of <typeparamref name="T"/>.</param>
+        /// <returns><see cref="List{DeltaObject}"/></returns>
+        /// <exception cref="ArgumentNullException">Thrown when either arguments are <c>null</c>.</exception>
         public static List<DeltaObject> GetDeltaObjects<T>(this T originalObject, T newObject)
         {
             if (originalObject == null)
@@ -23,6 +34,14 @@ namespace DeltaObjectGenerator.Extensions
             return DeltaObjectFromObjectGenerator.GetDeltaObjects(originalObject, newObject);
         }
 
+        /// <summary>
+        /// Returns a <see cref="List{DeltaObject}"/>, which will be empty if there are no deltas.
+        /// </summary>
+        /// <typeparam name="T">Any type.</typeparam>
+        /// <param name="originalObject">A type of <typeparamref name="T"/>.</param>
+        /// <param name="jObject">A type of <see cref="JObject"/>.</param>
+        /// <returns><see cref="List{DeltaObject}"/></returns>
+        /// <exception cref="ArgumentNullException">Thrown when either arguments are <c>null</c>.</exception>
         public static List<DeltaObject> GetDeltaObjects<T>(this T originalObject, JObject jObject)
         {
             if (originalObject == null)
