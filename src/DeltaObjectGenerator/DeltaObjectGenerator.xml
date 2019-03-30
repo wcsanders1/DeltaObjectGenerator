@@ -53,6 +53,52 @@
             <returns><see cref="T:System.Collections.Generic.List`1"/></returns>
             <exception cref="T:System.ArgumentNullException">Thrown when either arguments are <c>null</c>.</exception>
         </member>
+        <!-- Badly formed XML comment ignored for member "T:DeltaObjectGenerator.Generators.IDeltaObjectEngine" -->
+        <member name="M:DeltaObjectGenerator.Generators.IDeltaObjectEngine.GetDeltaObjects``1(``0,``0)">
+            <summary>
+            Returns a <see cref="T:System.Collections.Generic.List`1"/>, which will be empty if there are no deltas.
+            </summary>
+            <typeparam name="T">Any type.</typeparam>
+            <param name="originalObject">A type of <typeparamref name="T"/>.</param>
+            <param name="newObject">A type of <typeparamref name="T"/>.</param>
+            <returns><see cref="T:System.Collections.Generic.List`1"/></returns>
+            <exception cref="T:System.ArgumentNullException">Thrown when either arguments are <c>null</c>.</exception>
+        </member>
+        <member name="M:DeltaObjectGenerator.Generators.IDeltaObjectEngine.GetDeltaObjects``1(``0,Newtonsoft.Json.Linq.JObject)">
+            <summary>
+            Returns a <see cref="T:System.Collections.Generic.List`1"/>, which will be empty if there are no deltas.
+            </summary>
+            <typeparam name="T">Any type.</typeparam>
+            <param name="originalObject">A type of <typeparamref name="T"/>.</param>
+            <param name="jObject">A type of <see cref="T:Newtonsoft.Json.Linq.JObject"/>.</param>
+            <returns><see cref="T:System.Collections.Generic.List`1"/></returns>
+            <exception cref="T:System.ArgumentNullException">Thrown when either arguments are <c>null</c>.</exception>
+        </member>
+        <member name="T:DeltaObjectGenerator.Generators.DeltaObjectEngine">
+            <summary>
+            A class offering functionality to generate a <see cref="T:System.Collections.Generic.List`1"/>
+            </summary>
+        </member>
+        <member name="M:DeltaObjectGenerator.Generators.DeltaObjectEngine.GetDeltaObjects``1(``0,``0)">
+            <summary>
+            Returns a <see cref="T:System.Collections.Generic.List`1"/>, which will be empty if there are no deltas.
+            </summary>
+            <typeparam name="T">Any type.</typeparam>
+            <param name="originalObject">A type of <typeparamref name="T"/>.</param>
+            <param name="newObject">A type of <typeparamref name="T"/>.</param>
+            <returns><see cref="T:System.Collections.Generic.List`1"/></returns>
+            <exception cref="T:System.ArgumentNullException">Thrown when either arguments are <c>null</c>.</exception>
+        </member>
+        <member name="M:DeltaObjectGenerator.Generators.DeltaObjectEngine.GetDeltaObjects``1(``0,Newtonsoft.Json.Linq.JObject)">
+            <summary>
+            Returns a <see cref="T:System.Collections.Generic.List`1"/>, which will be empty if there are no deltas.
+            </summary>
+            <typeparam name="T">Any type.</typeparam>
+            <param name="originalObject">A type of <typeparamref name="T"/>.</param>
+            <param name="jObject">A type of <see cref="T:Newtonsoft.Json.Linq.JObject"/>.</param>
+            <returns><see cref="T:System.Collections.Generic.List`1"/></returns>
+            <exception cref="T:System.ArgumentNullException">Thrown when either arguments are <c>null</c>.</exception>
+        </member>
         <member name="T:DeltaObjectGenerator.Models.ConversionStatus">
             <summary>
             Provides the status of the conversion attempt of a value from one type to another.
