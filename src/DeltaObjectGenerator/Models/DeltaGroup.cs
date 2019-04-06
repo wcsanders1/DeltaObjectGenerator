@@ -29,9 +29,6 @@ namespace DeltaObjectGenerator.Models
 
                 return GroupValueConversionStatus.Fail;
             }
-
-            internal set
-            { }
         }
 
         /// <summary>
