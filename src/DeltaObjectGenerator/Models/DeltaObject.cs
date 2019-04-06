@@ -40,11 +40,11 @@ namespace DeltaObjectGenerator.Models
         public string StringifiedNewValue { get; internal set; }
 
         /// <summary>
-        /// Has a value of <see cref="ConversionStatus.Valid"/> when the value of <see cref="NewValue"/>
+        /// Has a value of <see cref="ValueConversionStatus.Success"/> when the value of <see cref="NewValue"/>
         /// can be converted into the type of the property on the model, otherwise the value will be
-        /// <see cref="ConversionStatus.Invalid"/>.
+        /// <see cref="ValueConversionStatus.Fail"/>.
         /// </summary>
-        public ConversionStatus ConversionStatus { get; internal set; }
+        public ValueConversionStatus ValueConversionStatus { get; internal set; }
 
         internal DeltaObject()
         {}

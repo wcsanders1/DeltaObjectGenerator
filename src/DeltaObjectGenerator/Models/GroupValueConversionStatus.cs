@@ -6,21 +6,21 @@ namespace DeltaObjectGenerator.Models
     /// Enum indicating status of conversion of <see cref="JObject"/> values into their associated 
     /// properties.
     /// </summary>
-    public enum GroupConversionStatus
+    public enum GroupValueConversionStatus
     {
         /// <summary>
         /// Indicates all deltas are convertible to the type of their associated property. 
         /// </summary>
-        CompleteSuccess,
+        Success = 0,
 
         /// <summary>
         /// Indicates some deltas are and some are not convertible to the type of their associated property.
         /// </summary>
-        Partial,
+        Partial = 1,
 
         /// <summary>
         /// Indicates no deltas are convertible to the type of their associated property.
         /// </summary>
-        CompleteFail
+        Fail = 2
     }
 }

@@ -12,19 +12,42 @@ namespace DeltaObjectGenerator.Models
         /// Indicates whether all, some, or none of the properties were successfully converted 
         /// into their associated types.
         /// </summary>
-        public GroupConversionStatus ConversionStatus { get; internal set; }
+        public GroupValueConversionStatus ValueConversionStatus
+        {
+            get
+            {
+                if (DeltaObjectsValueConversionFail.Count == 0)
+                {
+                    return GroupValueConversionStatus.Success;
+                }
+
+                if (DeltaObjectsValueConversionFail.Count > 0 &&
+                    DeltaObjects.Count > 0)
+                {
+                    return GroupValueConversionStatus.Partial;
+                }
+
+                return GroupValueConversionStatus.Success;
+            }
+
+            internal set
+            { }
+        }
 
         /// <summary>
-        /// Contains <see cref="DeltaObject"/>s with <see cref="ConversionStatus.Valid"/>.
+        /// Contains <see cref="DeltaObject"/>s with <see cref="ValueConversionStatus.Success"/>.
         /// </summary>
-        public List<DeltaObject> DeltaObjectsConversionSuccess { get; internal set; }
+        public List<DeltaObject> DeltaObjects { get; internal set; }
 
         /// <summary>
-        /// Contains <see cref="DeltaObject"/>s with <see cref="ConversionStatus.Invalid"/>.
+        /// Contains <see cref="DeltaObject"/>s with <see cref="ValueConversionStatus.Fail"/>.
         /// </summary>
-        public List<DeltaObject> DeltaObjectsConversionFail { get; internal set; }
+        public List<DeltaObject> DeltaObjectsValueConversionFail { get; internal set; }
 
         internal DeltaGroup()
-        {}
+        {
+            DeltaObjects = new List<DeltaObject>();
+            DeltaObjectsValueConversionFail = new List<DeltaObject>();
+        }
     }
 }
