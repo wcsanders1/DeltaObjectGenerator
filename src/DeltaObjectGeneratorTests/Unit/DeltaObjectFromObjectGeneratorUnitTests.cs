@@ -72,7 +72,7 @@ namespace DeltaObjectGeneratorTests.Unit
                 Assert.NotNull(deltaObjects);
                 Assert.Single(deltaObjects);
                 Assert.Equal(string.Empty, deltaObjects[0].NewValue);
-                Assert.Equal(ConversionStatus.Valid, deltaObjects[0].ConversionStatus);
+                Assert.Equal(ValueConversionStatus.Success, deltaObjects[0].ValueConversionStatus);
             }
 
             [Fact]

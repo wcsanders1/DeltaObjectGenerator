@@ -7,7 +7,7 @@ using System.Collections.Generic;
 namespace DeltaObjectGenerator.Generators
 {
     /// <summary>
-    /// Interface offering methods returning <see cref="List{DeltaObject}"./>
+    /// Interface offering methods returning <see cref="List{DeltaObject}"/>.
     /// </summary>
     public interface IDeltaObjectEngine
     {
@@ -22,14 +22,15 @@ namespace DeltaObjectGenerator.Generators
         List<DeltaObject> GetDeltaObjects<T>(T originalObject, T newObject);
 
         /// <summary>
-        /// Returns a <see cref="List{DeltaObject}"/>, which will be empty if there are no deltas.
+        /// Returns a <see cref="DeltaGroup"/>, with empty collections of <see cref="DeltaObject"/> 
+        /// if there are no deltas.
         /// </summary>
         /// <typeparam name="T">Any type.</typeparam>
         /// <param name="originalObject">A type of <typeparamref name="T"/>.</param>
         /// <param name="jObject">A type of <see cref="JObject"/>.</param>
-        /// <returns><see cref="List{DeltaObject}"/></returns>
+        /// <returns><see cref="DeltaGroup"/></returns>
         /// <exception cref="ArgumentNullException">Thrown when either arguments are <c>null</c>.</exception>
-        List<DeltaObject> GetDeltaObjects<T>(T originalObject, JObject jObject);
+        DeltaGroup GetDeltaObjects<T>(T originalObject, JObject jObject);
     }
 
     /// <summary>
@@ -51,14 +52,15 @@ namespace DeltaObjectGenerator.Generators
         }
 
         /// <summary>
-        /// Returns a <see cref="List{DeltaObject}"/>, which will be empty if there are no deltas.
+        /// Returns a <see cref="DeltaGroup"/>, with empty collections of <see cref="DeltaObject"/> 
+        /// if there are no deltas.
         /// </summary>
         /// <typeparam name="T">Any type.</typeparam>
         /// <param name="originalObject">A type of <typeparamref name="T"/>.</param>
         /// <param name="jObject">A type of <see cref="JObject"/>.</param>
-        /// <returns><see cref="List{DeltaObject}"/></returns>
+        /// <returns><see cref="DeltaGroup"/></returns>
         /// <exception cref="ArgumentNullException">Thrown when either arguments are <c>null</c>.</exception>
-        public List<DeltaObject> GetDeltaObjects<T>(T originalObject, JObject jObject)
+        public DeltaGroup GetDeltaObjects<T>(T originalObject, JObject jObject)
         {
             return originalObject.GetDeltaObjects(jObject);
         }

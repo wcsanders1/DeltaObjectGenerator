@@ -45,15 +45,20 @@
         </member>
         <member name="M:DeltaObjectGenerator.Extensions.GenericExtensions.GetDeltaObjects``1(``0,Newtonsoft.Json.Linq.JObject)">
             <summary>
-            Returns a <see cref="T:System.Collections.Generic.List`1"/>, which will be empty if there are no deltas.
+            Returns a <see cref="T:DeltaObjectGenerator.Models.DeltaGroup"/>, with empty collections of <see cref="T:DeltaObjectGenerator.Models.DeltaObject"/> 
+            if there are no deltas.
             </summary>
             <typeparam name="T">Any type.</typeparam>
             <param name="originalObject">A type of <typeparamref name="T"/>.</param>
             <param name="jObject">A type of <see cref="T:Newtonsoft.Json.Linq.JObject"/>.</param>
-            <returns><see cref="T:System.Collections.Generic.List`1"/></returns>
+            <returns><see cref="T:DeltaObjectGenerator.Models.DeltaGroup"/></returns>
             <exception cref="T:System.ArgumentNullException">Thrown when either arguments are <c>null</c>.</exception>
         </member>
-        <!-- Badly formed XML comment ignored for member "T:DeltaObjectGenerator.Generators.IDeltaObjectEngine" -->
+        <member name="T:DeltaObjectGenerator.Generators.IDeltaObjectEngine">
+            <summary>
+            Interface offering methods returning <see cref="T:System.Collections.Generic.List`1"/>.
+            </summary>
+        </member>
         <member name="M:DeltaObjectGenerator.Generators.IDeltaObjectEngine.GetDeltaObjects``1(``0,``0)">
             <summary>
             Returns a <see cref="T:System.Collections.Generic.List`1"/>, which will be empty if there are no deltas.
@@ -66,12 +71,13 @@
         </member>
         <member name="M:DeltaObjectGenerator.Generators.IDeltaObjectEngine.GetDeltaObjects``1(``0,Newtonsoft.Json.Linq.JObject)">
             <summary>
-            Returns a <see cref="T:System.Collections.Generic.List`1"/>, which will be empty if there are no deltas.
+            Returns a <see cref="T:DeltaObjectGenerator.Models.DeltaGroup"/>, with empty collections of <see cref="T:DeltaObjectGenerator.Models.DeltaObject"/> 
+            if there are no deltas.
             </summary>
             <typeparam name="T">Any type.</typeparam>
             <param name="originalObject">A type of <typeparamref name="T"/>.</param>
             <param name="jObject">A type of <see cref="T:Newtonsoft.Json.Linq.JObject"/>.</param>
-            <returns><see cref="T:System.Collections.Generic.List`1"/></returns>
+            <returns><see cref="T:DeltaObjectGenerator.Models.DeltaGroup"/></returns>
             <exception cref="T:System.ArgumentNullException">Thrown when either arguments are <c>null</c>.</exception>
         </member>
         <member name="T:DeltaObjectGenerator.Generators.DeltaObjectEngine">
@@ -91,28 +97,14 @@
         </member>
         <member name="M:DeltaObjectGenerator.Generators.DeltaObjectEngine.GetDeltaObjects``1(``0,Newtonsoft.Json.Linq.JObject)">
             <summary>
-            Returns a <see cref="T:System.Collections.Generic.List`1"/>, which will be empty if there are no deltas.
+            Returns a <see cref="T:DeltaObjectGenerator.Models.DeltaGroup"/>, with empty collections of <see cref="T:DeltaObjectGenerator.Models.DeltaObject"/> 
+            if there are no deltas.
             </summary>
             <typeparam name="T">Any type.</typeparam>
             <param name="originalObject">A type of <typeparamref name="T"/>.</param>
             <param name="jObject">A type of <see cref="T:Newtonsoft.Json.Linq.JObject"/>.</param>
-            <returns><see cref="T:System.Collections.Generic.List`1"/></returns>
+            <returns><see cref="T:DeltaObjectGenerator.Models.DeltaGroup"/></returns>
             <exception cref="T:System.ArgumentNullException">Thrown when either arguments are <c>null</c>.</exception>
-        </member>
-        <member name="T:DeltaObjectGenerator.Models.ConversionStatus">
-            <summary>
-            Provides the status of the conversion attempt of a value from one type to another.
-            </summary>
-        </member>
-        <member name="F:DeltaObjectGenerator.Models.ConversionStatus.Valid">
-            <summary>
-            Indicates that the value can be converted into a specific type.
-            </summary>
-        </member>
-        <member name="F:DeltaObjectGenerator.Models.ConversionStatus.Invalid">
-            <summary>
-            Indicates that the value cannot be converted into a specific type.
-            </summary>
         </member>
         <member name="T:DeltaObjectGenerator.Models.DeltaGroup">
             <summary>
@@ -120,20 +112,20 @@
             and a <see cref="T:System.Collections.Generic.List`1"/> for unsuccessfully converted properties.
             </summary>
         </member>
-        <member name="P:DeltaObjectGenerator.Models.DeltaGroup.ConversionStatus">
+        <member name="P:DeltaObjectGenerator.Models.DeltaGroup.ValueConversionStatus">
             <summary>
             Indicates whether all, some, or none of the properties were successfully converted 
             into their associated types.
             </summary>
         </member>
-        <member name="P:DeltaObjectGenerator.Models.DeltaGroup.DeltaObjectsConversionSuccess">
+        <member name="P:DeltaObjectGenerator.Models.DeltaGroup.DeltaObjects">
             <summary>
-            Contains <see cref="T:DeltaObjectGenerator.Models.DeltaObject"/>s with <see cref="F:DeltaObjectGenerator.Models.ConversionStatus.Valid"/>.
+            Contains <see cref="T:DeltaObjectGenerator.Models.DeltaObject"/>s with <see cref="F:DeltaObjectGenerator.Models.ValueConversionStatus.Success"/>.
             </summary>
         </member>
-        <member name="P:DeltaObjectGenerator.Models.DeltaGroup.DeltaObjectsConversionFail">
+        <member name="P:DeltaObjectGenerator.Models.DeltaGroup.DeltaObjectsValueConversionFail">
             <summary>
-            Contains <see cref="T:DeltaObjectGenerator.Models.DeltaObject"/>s with <see cref="F:DeltaObjectGenerator.Models.ConversionStatus.Invalid"/>.
+            Contains <see cref="T:DeltaObjectGenerator.Models.DeltaObject"/>s with <see cref="F:DeltaObjectGenerator.Models.ValueConversionStatus.Fail"/>.
             </summary>
         </member>
         <member name="T:DeltaObjectGenerator.Models.DeltaObject">
@@ -173,32 +165,47 @@
             The new value of the property as a <see cref="T:System.String"/>.
             </summary>
         </member>
-        <member name="P:DeltaObjectGenerator.Models.DeltaObject.ConversionStatus">
+        <member name="P:DeltaObjectGenerator.Models.DeltaObject.ValueConversionStatus">
             <summary>
-            Has a value of <see cref="F:DeltaObjectGenerator.Models.ConversionStatus.Valid"/> when the value of <see cref="P:DeltaObjectGenerator.Models.DeltaObject.NewValue"/>
+            Has a value of <see cref="F:DeltaObjectGenerator.Models.ValueConversionStatus.Success"/> when the value of <see cref="P:DeltaObjectGenerator.Models.DeltaObject.NewValue"/>
             can be converted into the type of the property on the model, otherwise the value will be
-            <see cref="F:DeltaObjectGenerator.Models.ConversionStatus.Invalid"/>.
+            <see cref="F:DeltaObjectGenerator.Models.ValueConversionStatus.Fail"/>.
             </summary>
         </member>
-        <member name="T:DeltaObjectGenerator.Models.GroupConversionStatus">
+        <member name="T:DeltaObjectGenerator.Models.GroupValueConversionStatus">
             <summary>
             Enum indicating status of conversion of <see cref="T:Newtonsoft.Json.Linq.JObject"/> values into their associated 
             properties.
             </summary>
         </member>
-        <member name="F:DeltaObjectGenerator.Models.GroupConversionStatus.CompleteSuccess">
+        <member name="F:DeltaObjectGenerator.Models.GroupValueConversionStatus.Success">
             <summary>
             Indicates all deltas are convertible to the type of their associated property. 
             </summary>
         </member>
-        <member name="F:DeltaObjectGenerator.Models.GroupConversionStatus.Partial">
+        <member name="F:DeltaObjectGenerator.Models.GroupValueConversionStatus.Partial">
             <summary>
             Indicates some deltas are and some are not convertible to the type of their associated property.
             </summary>
         </member>
-        <member name="F:DeltaObjectGenerator.Models.GroupConversionStatus.CompleteFail">
+        <member name="F:DeltaObjectGenerator.Models.GroupValueConversionStatus.Fail">
             <summary>
             Indicates no deltas are convertible to the type of their associated property.
+            </summary>
+        </member>
+        <member name="T:DeltaObjectGenerator.Models.ValueConversionStatus">
+            <summary>
+            Provides the status of the conversion attempt of a value from one type to another.
+            </summary>
+        </member>
+        <member name="F:DeltaObjectGenerator.Models.ValueConversionStatus.Success">
+            <summary>
+            Indicates that the value can be converted into a specific type.
+            </summary>
+        </member>
+        <member name="F:DeltaObjectGenerator.Models.ValueConversionStatus.Fail">
+            <summary>
+            Indicates that the value cannot be converted into a specific type.
             </summary>
         </member>
     </members>

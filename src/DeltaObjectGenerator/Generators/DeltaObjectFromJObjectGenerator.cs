@@ -11,7 +11,7 @@ namespace DeltaObjectGenerator.Generators
 {
     internal class DeltaObjectFromJObjectGenerator
     {
-        public static List<DeltaObject> GetDeltaObjects<T>(T originalObject, JObject jObject)
+        public static DeltaGroup GetDeltaObjects<T>(T originalObject, JObject jObject)
         {
             var deltaProperties = TypeCache.GetDeltaPropertyInfo<T>();
             var propertiesToIgnoreOnDefault = TypeCache.GetPropertiesToIgnoreOnDefault<T>();
@@ -20,8 +20,25 @@ namespace DeltaObjectGenerator.Generators
             return deltaProperties.Select(deltaProperty =>
                 GetDeltaObject(deltaProperty, originalObject, jObject,
                     propertiesToIgnoreOnDefault, ignorePropertiesOnDefault))
-                .Where(d => d != null)
-                .ToList();
+                .Aggregate(new DeltaGroup(), (deltaGroup, deltaObject) =>
+                {
+                    if (deltaObject == null)
+                    {
+                        return deltaGroup;
+                    }
+
+                    switch (deltaObject.ValueConversionStatus)
+                    {
+                        case ValueConversionStatus.Success:
+                            deltaGroup.DeltaObjects.Add(deltaObject);
+                            return deltaGroup;
+                        case ValueConversionStatus.Fail:
+                            deltaGroup.DeltaObjectsValueConversionFail.Add(deltaObject);
+                            return deltaGroup;
+                        default:
+                            return deltaGroup;
+                    }
+                });
         }
 
         private static DeltaObject GetDeltaObject<T>(DeltaProperty deltaProperty, T originalObject,
@@ -57,7 +74,7 @@ namespace DeltaObjectGenerator.Generators
             {
                 return new DeltaObject
                 {
-                    ConversionStatus = ConversionStatus.Invalid,
+                    ValueConversionStatus = ValueConversionStatus.Fail,
                     PropertyName = propertyInfo.Name,
                     PropertyAlias = deltaProperty.Alias,
                     OriginalValue = originalValue,
@@ -77,7 +94,7 @@ namespace DeltaObjectGenerator.Generators
             {
                 return new DeltaObject
                 {
-                    ConversionStatus = ConversionStatus.Valid,
+                    ValueConversionStatus = ValueConversionStatus.Success,
                     PropertyName = propertyInfo.Name,
                     PropertyAlias = deltaProperty.Alias,
                     OriginalValue = originalValue,

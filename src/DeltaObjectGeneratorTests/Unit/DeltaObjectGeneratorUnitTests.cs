@@ -59,12 +59,14 @@ namespace DeltaObjectGeneratorTests.Unit
 
                 var sut = new DeltaObjectEngine();
 
-                var deltaObjects = sut.GetDeltaObjects(originalCustomer, newCustomerJObj);
+                var deltaGroup = sut.GetDeltaObjects(originalCustomer, newCustomerJObj);
 
-                Assert.NotNull(deltaObjects);
-                Assert.Single(deltaObjects);
-                Assert.Equal(ConversionStatus.Valid, deltaObjects[0].ConversionStatus);
-                Assert.Equal(newCustomer.FirstName, deltaObjects[0].NewValue);
+                Assert.NotNull(deltaGroup);
+                Assert.Equal(GroupValueConversionStatus.Success, deltaGroup.ValueConversionStatus);
+                Assert.Single(deltaGroup.DeltaObjects);
+                Assert.Empty(deltaGroup.DeltaObjectsValueConversionFail);
+                Assert.Equal(ValueConversionStatus.Success, deltaGroup.DeltaObjects[0].ValueConversionStatus);
+                Assert.Equal(newCustomer.FirstName, deltaGroup.DeltaObjects[0].NewValue);
             }
         }
     }

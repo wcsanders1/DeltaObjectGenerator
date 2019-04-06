@@ -38,7 +38,7 @@ namespace DeltaObjectGenerator.Generators
             {
                 return new DeltaObject
                 {
-                    ConversionStatus =ConversionStatus.Valid,
+                    ValueConversionStatus =ValueConversionStatus.Success,
                     PropertyName = propertyInfo.Name,
                     PropertyAlias = deltaProperty.Alias,
                     OriginalValue = originalValue,

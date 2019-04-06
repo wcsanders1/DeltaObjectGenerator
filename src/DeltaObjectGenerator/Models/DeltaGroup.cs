@@ -27,7 +27,7 @@ namespace DeltaObjectGenerator.Models
                     return GroupValueConversionStatus.Partial;
                 }
 
-                return GroupValueConversionStatus.Success;
+                return GroupValueConversionStatus.Fail;
             }
 
             internal set

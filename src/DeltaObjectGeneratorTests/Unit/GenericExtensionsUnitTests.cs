@@ -33,7 +33,7 @@ namespace DeltaObjectGeneratorTests.Unit
                 Assert.NotNull(deltaObjects);
                 Assert.IsType<List<DeltaObject>>(deltaObjects);
                 Assert.Equal(2, deltaObjects.Count);
-                Assert.True(deltaObjects.TrueForAll(o => o.ConversionStatus == ConversionStatus.Valid));
+                Assert.True(deltaObjects.TrueForAll(o => o.ValueConversionStatus == ValueConversionStatus.Success));
             }
 
             [Fact]
@@ -75,12 +75,13 @@ namespace DeltaObjectGeneratorTests.Unit
 
                 var newCustomerObj = JObject.FromObject(newCustomer);
 
-                var deltaObjects = originalCustomer.GetDeltaObjects(newCustomerObj);
+                var deltaGroup = originalCustomer.GetDeltaObjects(newCustomerObj);
 
-                Assert.NotNull(deltaObjects);
-                Assert.IsType<List<DeltaObject>>(deltaObjects);
-                Assert.Equal(2, deltaObjects.Count);
-                Assert.True(deltaObjects.TrueForAll(o => o.ConversionStatus == ConversionStatus.Valid));
+                Assert.NotNull(deltaGroup);
+                Assert.IsType<DeltaGroup>(deltaGroup);
+                Assert.Equal(2, deltaGroup.DeltaObjects.Count);
+                Assert.True(deltaGroup.DeltaObjects.TrueForAll(o => 
+                    o.ValueConversionStatus == ValueConversionStatus.Success));
             }
 
             [Fact]

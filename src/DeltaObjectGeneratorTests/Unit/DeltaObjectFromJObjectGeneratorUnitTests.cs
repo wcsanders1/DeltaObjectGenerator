@@ -30,12 +30,14 @@ namespace DeltaObjectGeneratorTests.Unit
 
                 var newCustomerJObj = JObject.FromObject(newCustomer);
 
-                var deltaObjects = DeltaObjectFromJObjectGenerator.GetDeltaObjects(originalCustomer, newCustomerJObj);
+                var deltaGroup = DeltaObjectFromJObjectGenerator.GetDeltaObjects(originalCustomer, newCustomerJObj);
 
-                Assert.NotNull(deltaObjects);
-                Assert.Single(deltaObjects);
-                Assert.Equal(ConversionStatus.Valid, deltaObjects[0].ConversionStatus);
-                Assert.Equal(newCustomer.FirstName, deltaObjects[0].NewValue);
+                Assert.NotNull(deltaGroup);
+                Assert.Equal(GroupValueConversionStatus.Success, deltaGroup.ValueConversionStatus);
+                Assert.Single(deltaGroup.DeltaObjects);
+                Assert.Empty(deltaGroup.DeltaObjectsValueConversionFail);
+                Assert.Equal(ValueConversionStatus.Success, deltaGroup.DeltaObjects[0].ValueConversionStatus);
+                Assert.Equal(newCustomer.FirstName, deltaGroup.DeltaObjects[0].NewValue);
             }
 
             [Fact]
@@ -54,12 +56,14 @@ namespace DeltaObjectGeneratorTests.Unit
 
                 var newCustomerJObj = JObject.FromObject(newCustomer);
 
-                var deltaObjects = DeltaObjectFromJObjectGenerator.GetDeltaObjects(originalCustomer, newCustomerJObj);
+                var deltaGroup = DeltaObjectFromJObjectGenerator.GetDeltaObjects(originalCustomer, newCustomerJObj);
 
-                Assert.NotNull(deltaObjects);
-                Assert.Single(deltaObjects);
-                Assert.Equal(ConversionStatus.Valid, deltaObjects[0].ConversionStatus);
-                Assert.Equal(newCustomer.FirstName, deltaObjects[0].NewValue);
+                Assert.NotNull(deltaGroup);
+                Assert.Equal(GroupValueConversionStatus.Success, deltaGroup.ValueConversionStatus);
+                Assert.Single(deltaGroup.DeltaObjects);
+                Assert.Empty(deltaGroup.DeltaObjectsValueConversionFail);
+                Assert.Equal(ValueConversionStatus.Success, deltaGroup.DeltaObjects[0].ValueConversionStatus);
+                Assert.Equal(newCustomer.FirstName, deltaGroup.DeltaObjects[0].NewValue);
             }
 
             [Fact]
@@ -78,12 +82,14 @@ namespace DeltaObjectGeneratorTests.Unit
 
                 var newCustomerJObj = JObject.FromObject(newCustomer);
 
-                var deltaObjects = DeltaObjectFromJObjectGenerator.GetDeltaObjects(originalCustomer, newCustomerJObj);
+                var deltaGroup = DeltaObjectFromJObjectGenerator.GetDeltaObjects(originalCustomer, newCustomerJObj);
 
-                Assert.NotNull(deltaObjects);
-                Assert.Single(deltaObjects);
-                Assert.Equal(ConversionStatus.Valid, deltaObjects[0].ConversionStatus);
-                Assert.Equal(newCustomer.firstName, deltaObjects[0].NewValue);
+                Assert.NotNull(deltaGroup);
+                Assert.Equal(GroupValueConversionStatus.Success, deltaGroup.ValueConversionStatus);
+                Assert.Single(deltaGroup.DeltaObjects);
+                Assert.Empty(deltaGroup.DeltaObjectsValueConversionFail);
+                Assert.Equal(ValueConversionStatus.Success, deltaGroup.DeltaObjects[0].ValueConversionStatus);
+                Assert.Equal(newCustomer.firstName, deltaGroup.DeltaObjects[0].NewValue);
             }
 
             [Fact]
@@ -103,12 +109,14 @@ namespace DeltaObjectGeneratorTests.Unit
 
                 var newCustomerJObj = JObject.FromObject(newCustomer);
 
-                var deltaObjects = DeltaObjectFromJObjectGenerator.GetDeltaObjects(originalCustomer, newCustomerJObj);
+                var deltaGroup = DeltaObjectFromJObjectGenerator.GetDeltaObjects(originalCustomer, newCustomerJObj);
 
-                Assert.NotNull(deltaObjects);
-                Assert.Single(deltaObjects);
-                Assert.Equal(ConversionStatus.Valid, deltaObjects[0].ConversionStatus);
-                Assert.Equal(newCustomer.Age, deltaObjects[0].NewValue);
+                Assert.NotNull(deltaGroup);
+                Assert.Equal(GroupValueConversionStatus.Success, deltaGroup.ValueConversionStatus);
+                Assert.Single(deltaGroup.DeltaObjects);
+                Assert.Empty(deltaGroup.DeltaObjectsValueConversionFail);
+                Assert.Equal(ValueConversionStatus.Success, deltaGroup.DeltaObjects[0].ValueConversionStatus);
+                Assert.Equal(newCustomer.Age, deltaGroup.DeltaObjects[0].NewValue);
             }
 
             [Fact]
@@ -128,12 +136,14 @@ namespace DeltaObjectGeneratorTests.Unit
 
                 var newCustomerJObj = JObject.FromObject(newCustomer);
 
-                var deltaObjects = DeltaObjectFromJObjectGenerator.GetDeltaObjects(originalCustomer, newCustomerJObj);
+                var deltaGroup = DeltaObjectFromJObjectGenerator.GetDeltaObjects(originalCustomer, newCustomerJObj);
 
-                Assert.NotNull(deltaObjects);
-                Assert.Single(deltaObjects);
-                Assert.Equal(ConversionStatus.Invalid, deltaObjects[0].ConversionStatus);
-                Assert.Equal(newCustomer.Age, deltaObjects[0].NewValue);
+                Assert.NotNull(deltaGroup);
+                Assert.Equal(GroupValueConversionStatus.Fail, deltaGroup.ValueConversionStatus);
+                Assert.Single(deltaGroup.DeltaObjectsValueConversionFail);
+                Assert.Empty(deltaGroup.DeltaObjects);
+                Assert.Equal(ValueConversionStatus.Fail, deltaGroup.DeltaObjectsValueConversionFail[0].ValueConversionStatus);
+                Assert.Equal(newCustomer.Age, deltaGroup.DeltaObjectsValueConversionFail[0].NewValue);
             }
 
             [Fact]
@@ -155,17 +165,19 @@ namespace DeltaObjectGeneratorTests.Unit
 
                 var newCustomerJObj = JObject.FromObject(newCustomer);
 
-                var deltaObjects = DeltaObjectFromJObjectGenerator.GetDeltaObjects(originalCustomer, newCustomerJObj);
+                var deltaGroup = DeltaObjectFromJObjectGenerator.GetDeltaObjects(originalCustomer, newCustomerJObj);
 
-                Assert.NotNull(deltaObjects);
-                Assert.Equal(2, deltaObjects.Count);
-                Assert.Equal(ConversionStatus.Valid, deltaObjects.First(o =>
-                    o.PropertyName == nameof(TestCustomer.FirstName)).ConversionStatus);
-                Assert.Equal(ConversionStatus.Valid, deltaObjects.First(o =>
-                    o.PropertyName == nameof(TestCustomer.DateOfBirth)).ConversionStatus);
-                Assert.Equal(newCustomer.FirstName, deltaObjects.First(o =>
+                Assert.NotNull(deltaGroup);
+                Assert.Equal(2, deltaGroup.DeltaObjects.Count);
+                Assert.Empty(deltaGroup.DeltaObjectsValueConversionFail);
+                Assert.Equal(GroupValueConversionStatus.Success, deltaGroup.ValueConversionStatus);
+                Assert.Equal(ValueConversionStatus.Success, deltaGroup.DeltaObjects.First(o =>
+                    o.PropertyName == nameof(TestCustomer.FirstName)).ValueConversionStatus);
+                Assert.Equal(ValueConversionStatus.Success, deltaGroup.DeltaObjects.First(o =>
+                    o.PropertyName == nameof(TestCustomer.DateOfBirth)).ValueConversionStatus);
+                Assert.Equal(newCustomer.FirstName, deltaGroup.DeltaObjects.First(o =>
                     o.PropertyName == nameof(TestCustomer.FirstName)).NewValue);
-                Assert.Equal(newCustomer.DateOfBirth, deltaObjects.First(o =>
+                Assert.Equal(newCustomer.DateOfBirth, deltaGroup.DeltaObjects.First(o =>
                     o.PropertyName == nameof(TestCustomer.DateOfBirth)).NewValue);
             }
 
@@ -188,17 +200,19 @@ namespace DeltaObjectGeneratorTests.Unit
 
                 var newCustomerJObj = JObject.FromObject(newCustomer);
 
-                var deltaObjects = DeltaObjectFromJObjectGenerator.GetDeltaObjects(originalCustomer, newCustomerJObj);
+                var deltaGroup = DeltaObjectFromJObjectGenerator.GetDeltaObjects(originalCustomer, newCustomerJObj);
 
-                Assert.NotNull(deltaObjects);
-                Assert.Equal(2, deltaObjects.Count);
-                Assert.Equal(ConversionStatus.Valid, deltaObjects.First(o =>
-                    o.PropertyName == nameof(TestCustomer.FirstName)).ConversionStatus);
-                Assert.Equal(ConversionStatus.Valid, deltaObjects.First(o =>
-                    o.PropertyName == nameof(TestCustomer.DateOfBirth)).ConversionStatus);
-                Assert.Equal(newCustomer.FirstName, deltaObjects.First(o =>
+                Assert.NotNull(deltaGroup);
+                Assert.Equal(2, deltaGroup.DeltaObjects.Count);
+                Assert.Empty(deltaGroup.DeltaObjectsValueConversionFail);
+                Assert.Equal(GroupValueConversionStatus.Success, deltaGroup.ValueConversionStatus);
+                Assert.Equal(ValueConversionStatus.Success, deltaGroup.DeltaObjects.First(o =>
+                    o.PropertyName == nameof(TestCustomer.FirstName)).ValueConversionStatus);
+                Assert.Equal(ValueConversionStatus.Success, deltaGroup.DeltaObjects.First(o =>
+                    o.PropertyName == nameof(TestCustomer.DateOfBirth)).ValueConversionStatus);
+                Assert.Equal(newCustomer.FirstName, deltaGroup.DeltaObjects.First(o =>
                     o.PropertyName == nameof(TestCustomer.FirstName)).NewValue);
-                Assert.Equal(new DateTime(1979, 12, 8), deltaObjects.First(o =>
+                Assert.Equal(new DateTime(1979, 12, 8), deltaGroup.DeltaObjects.First(o =>
                     o.PropertyName == nameof(TestCustomer.DateOfBirth)).NewValue);
             }
 
@@ -221,17 +235,19 @@ namespace DeltaObjectGeneratorTests.Unit
 
                 var newCustomerJObj = JObject.FromObject(newCustomer);
 
-                var deltaObjects = DeltaObjectFromJObjectGenerator.GetDeltaObjects(originalCustomer, newCustomerJObj);
+                var deltaGroup = DeltaObjectFromJObjectGenerator.GetDeltaObjects(originalCustomer, newCustomerJObj);
 
-                Assert.NotNull(deltaObjects);
-                Assert.Equal(2, deltaObjects.Count);
-                Assert.Equal(ConversionStatus.Valid, deltaObjects.First(o =>
-                    o.PropertyName == nameof(TestCustomer.FirstName)).ConversionStatus);
-                Assert.Equal(ConversionStatus.Invalid, deltaObjects.First(o =>
-                    o.PropertyName == nameof(TestCustomer.DateOfBirth)).ConversionStatus);
-                Assert.Equal(newCustomer.FirstName, deltaObjects.First(o =>
+                Assert.NotNull(deltaGroup);
+                Assert.Equal(GroupValueConversionStatus.Partial, deltaGroup.ValueConversionStatus);
+                Assert.Single(deltaGroup.DeltaObjects);
+                Assert.Single(deltaGroup.DeltaObjectsValueConversionFail);
+                Assert.Equal(ValueConversionStatus.Success, deltaGroup.DeltaObjects.First(o =>
+                    o.PropertyName == nameof(TestCustomer.FirstName)).ValueConversionStatus);
+                Assert.Equal(ValueConversionStatus.Fail, deltaGroup.DeltaObjectsValueConversionFail.First(o =>
+                    o.PropertyName == nameof(TestCustomer.DateOfBirth)).ValueConversionStatus);
+                Assert.Equal(newCustomer.FirstName, deltaGroup.DeltaObjects.First(o =>
                     o.PropertyName == nameof(TestCustomer.FirstName)).NewValue);
-                Assert.Equal(newCustomer.DateOfBirth, deltaObjects.First(o =>
+                Assert.Equal(newCustomer.DateOfBirth, deltaGroup.DeltaObjectsValueConversionFail.First(o =>
                     o.PropertyName == nameof(TestCustomer.DateOfBirth)).NewValue);
             }
 
@@ -252,17 +268,19 @@ namespace DeltaObjectGeneratorTests.Unit
 
                 var newCustomerJObj = JObject.FromObject(newCustomer);
 
-                var deltaObjects = DeltaObjectFromJObjectGenerator.GetDeltaObjects(originalCustomer, newCustomerJObj);
+                var deltaGroup = DeltaObjectFromJObjectGenerator.GetDeltaObjects(originalCustomer, newCustomerJObj);
 
-                Assert.NotNull(deltaObjects);
-                Assert.Equal(2, deltaObjects.Count);
-                Assert.Equal(ConversionStatus.Valid, deltaObjects.First(o =>
-                    o.PropertyName == nameof(TestCustomer.DateOfBirth)).ConversionStatus);
-                Assert.Equal(newCustomer.DateOfBirth, deltaObjects.First(o =>
+                Assert.NotNull(deltaGroup);
+                Assert.Equal(GroupValueConversionStatus.Success, deltaGroup.ValueConversionStatus);
+                Assert.Equal(2, deltaGroup.DeltaObjects.Count);
+                Assert.Empty(deltaGroup.DeltaObjectsValueConversionFail);
+                Assert.Equal(ValueConversionStatus.Success, deltaGroup.DeltaObjects.First(o =>
+                    o.PropertyName == nameof(TestCustomer.DateOfBirth)).ValueConversionStatus);
+                Assert.Equal(newCustomer.DateOfBirth, deltaGroup.DeltaObjects.First(o =>
                     o.PropertyName == nameof(TestCustomer.DateOfBirth)).NewValue);
-                Assert.Equal(ConversionStatus.Valid, deltaObjects.First(o =>
-                    o.PropertyName == nameof(TestCustomer.Age)).ConversionStatus);
-                Assert.Equal(newCustomer.Age, deltaObjects.First(o =>
+                Assert.Equal(ValueConversionStatus.Success, deltaGroup.DeltaObjects.First(o =>
+                    o.PropertyName == nameof(TestCustomer.Age)).ValueConversionStatus);
+                Assert.Equal(newCustomer.Age, deltaGroup.DeltaObjects.First(o =>
                     o.PropertyName == nameof(TestCustomer.Age)).NewValue);
             }
 
@@ -281,12 +299,14 @@ namespace DeltaObjectGeneratorTests.Unit
 
                 var newCustomerJObj = JObject.FromObject(newCustomer);
 
-                var deltaObjects = DeltaObjectFromJObjectGenerator.GetDeltaObjects(originalCustomer, newCustomerJObj);
+                var deltaGroup = DeltaObjectFromJObjectGenerator.GetDeltaObjects(originalCustomer, newCustomerJObj);
 
-                Assert.NotNull(deltaObjects);
-                Assert.Single(deltaObjects);
-                Assert.Null(deltaObjects[0].NewValue);
-                Assert.Equal(ConversionStatus.Valid, deltaObjects[0].ConversionStatus);
+                Assert.NotNull(deltaGroup);
+                Assert.Equal(GroupValueConversionStatus.Success, deltaGroup.ValueConversionStatus);
+                Assert.Single(deltaGroup.DeltaObjects);
+                Assert.Empty(deltaGroup.DeltaObjectsValueConversionFail);
+                Assert.Null(deltaGroup.DeltaObjects[0].NewValue);
+                Assert.Equal(ValueConversionStatus.Success, deltaGroup.DeltaObjects[0].ValueConversionStatus);
             }
 
             [Fact]
@@ -304,12 +324,14 @@ namespace DeltaObjectGeneratorTests.Unit
 
                 var newCustomerJObj = JObject.FromObject(newCustomer);
 
-                var deltaObjects = DeltaObjectFromJObjectGenerator.GetDeltaObjects(originalCustomer, newCustomerJObj);
+                var deltaGroup = DeltaObjectFromJObjectGenerator.GetDeltaObjects(originalCustomer, newCustomerJObj);
 
-                Assert.NotNull(deltaObjects);
-                Assert.Single(deltaObjects);
-                Assert.Equal(string.Empty, deltaObjects[0].NewValue);
-                Assert.Equal(ConversionStatus.Valid, deltaObjects[0].ConversionStatus);
+                Assert.NotNull(deltaGroup);
+                Assert.Equal(GroupValueConversionStatus.Success, deltaGroup.ValueConversionStatus);
+                Assert.Empty(deltaGroup.DeltaObjectsValueConversionFail);
+                Assert.Single(deltaGroup.DeltaObjects);
+                Assert.Equal(string.Empty, deltaGroup.DeltaObjects[0].NewValue);
+                Assert.Equal(ValueConversionStatus.Success, deltaGroup.DeltaObjects[0].ValueConversionStatus);
             }
 
             [Fact]
@@ -327,10 +349,12 @@ namespace DeltaObjectGeneratorTests.Unit
 
                 var newCustomerJObj = JObject.FromObject(newCustomer);
 
-                var deltaObjects = DeltaObjectFromJObjectGenerator.GetDeltaObjects(originalCustomer, newCustomerJObj);
+                var deltaGroup = DeltaObjectFromJObjectGenerator.GetDeltaObjects(originalCustomer, newCustomerJObj);
 
-                Assert.NotNull(deltaObjects);
-                Assert.Empty(deltaObjects);
+                Assert.NotNull(deltaGroup);
+                Assert.Equal(GroupValueConversionStatus.Success, deltaGroup.ValueConversionStatus);
+                Assert.Empty(deltaGroup.DeltaObjects);
+                Assert.Empty(deltaGroup.DeltaObjectsValueConversionFail);
             }
 
             [Fact]
@@ -348,10 +372,12 @@ namespace DeltaObjectGeneratorTests.Unit
 
                 var newCustomerJObj = JObject.FromObject(newCustomer);
 
-                var deltaObjects = DeltaObjectFromJObjectGenerator.GetDeltaObjects(originalCustomer, newCustomerJObj);
+                var deltaGroup = DeltaObjectFromJObjectGenerator.GetDeltaObjects(originalCustomer, newCustomerJObj);
 
-                Assert.NotNull(deltaObjects);
-                Assert.Empty(deltaObjects);
+                Assert.NotNull(deltaGroup);
+                Assert.Equal(GroupValueConversionStatus.Success, deltaGroup.ValueConversionStatus);
+                Assert.Empty(deltaGroup.DeltaObjects);
+                Assert.Empty(deltaGroup.DeltaObjectsValueConversionFail);
             }
 
             [Fact]
@@ -369,12 +395,14 @@ namespace DeltaObjectGeneratorTests.Unit
 
                 var newCustomerJObj = JObject.FromObject(newCustomer);
 
-                var deltaObjects = DeltaObjectFromJObjectGenerator.GetDeltaObjects(originalCustomer, newCustomerJObj);
+                var deltaGroup = DeltaObjectFromJObjectGenerator.GetDeltaObjects(originalCustomer, newCustomerJObj);
 
-                Assert.NotNull(deltaObjects);
-                Assert.Single(deltaObjects);
-                Assert.Equal(string.Empty, deltaObjects[0].NewValue);
-                Assert.Equal(ConversionStatus.Valid, deltaObjects[0].ConversionStatus);
+                Assert.NotNull(deltaGroup);
+                Assert.Equal(GroupValueConversionStatus.Success, deltaGroup.ValueConversionStatus);
+                Assert.Single(deltaGroup.DeltaObjects);
+                Assert.Empty(deltaGroup.DeltaObjectsValueConversionFail);
+                Assert.Equal(string.Empty, deltaGroup.DeltaObjects[0].NewValue);
+                Assert.Equal(ValueConversionStatus.Success, deltaGroup.DeltaObjects[0].ValueConversionStatus);
             }
 
             [Fact]
@@ -394,17 +422,19 @@ namespace DeltaObjectGeneratorTests.Unit
 
                 var newCustomerJObj = JObject.FromObject(newCustomer);
 
-                var deltaObjects = DeltaObjectFromJObjectGenerator.GetDeltaObjects(originalCustomer, newCustomerJObj);
+                var deltaGroup = DeltaObjectFromJObjectGenerator.GetDeltaObjects(originalCustomer, newCustomerJObj);
 
-                Assert.NotNull(deltaObjects);
-                Assert.Equal(2, deltaObjects.Count);
-                Assert.Equal(ConversionStatus.Valid, deltaObjects.First(o =>
-                    o.PropertyName == nameof(TestCustomerWithEnum.Age)).ConversionStatus);
-                Assert.Equal(ConversionStatus.Valid, deltaObjects.First(o =>
-                    o.PropertyName == nameof(TestCustomerWithEnum.SomeEnum)).ConversionStatus);
-                Assert.Equal(newCustomer.Age, deltaObjects.First(o =>
+                Assert.NotNull(deltaGroup);
+                Assert.Equal(GroupValueConversionStatus.Success, deltaGroup.ValueConversionStatus);
+                Assert.Empty(deltaGroup.DeltaObjectsValueConversionFail);
+                Assert.Equal(2, deltaGroup.DeltaObjects.Count);
+                Assert.Equal(ValueConversionStatus.Success, deltaGroup.DeltaObjects.First(o =>
+                    o.PropertyName == nameof(TestCustomerWithEnum.Age)).ValueConversionStatus);
+                Assert.Equal(ValueConversionStatus.Success, deltaGroup.DeltaObjects.First(o =>
+                    o.PropertyName == nameof(TestCustomerWithEnum.SomeEnum)).ValueConversionStatus);
+                Assert.Equal(newCustomer.Age, deltaGroup.DeltaObjects.First(o =>
                     o.PropertyName == nameof(TestCustomerWithEnum.Age)).NewValue);
-                Assert.Equal(TestEnum.Something, deltaObjects.First(o =>
+                Assert.Equal(TestEnum.Something, deltaGroup.DeltaObjects.First(o =>
                     o.PropertyName == nameof(TestCustomerWithEnum.SomeEnum)).NewValue);
             }
 
@@ -424,13 +454,15 @@ namespace DeltaObjectGeneratorTests.Unit
 
                 var newCustomerJObj = JObject.FromObject(newCustomer);
 
-                var deltaObjects = DeltaObjectFromJObjectGenerator.GetDeltaObjects(originalCustomer, newCustomerJObj);
+                var deltaGroup = DeltaObjectFromJObjectGenerator.GetDeltaObjects(originalCustomer, newCustomerJObj);
 
-                Assert.NotNull(deltaObjects);
-                Assert.Single(deltaObjects);
-                Assert.Equal(ConversionStatus.Valid, deltaObjects.First(o =>
-                    o.PropertyName == nameof(TestCustomerWithFlagEnum.SomeFlagEnum)).ConversionStatus);
-                Assert.Equal(TestFlagEnum.OneThing | TestFlagEnum.ThirdThing, deltaObjects.First(o =>
+                Assert.NotNull(deltaGroup);
+                Assert.Equal(GroupValueConversionStatus.Success, deltaGroup.ValueConversionStatus);
+                Assert.Empty(deltaGroup.DeltaObjectsValueConversionFail);
+                Assert.Single(deltaGroup.DeltaObjects);
+                Assert.Equal(ValueConversionStatus.Success, deltaGroup.DeltaObjects.First(o =>
+                    o.PropertyName == nameof(TestCustomerWithFlagEnum.SomeFlagEnum)).ValueConversionStatus);
+                Assert.Equal(TestFlagEnum.OneThing | TestFlagEnum.ThirdThing, deltaGroup.DeltaObjects.First(o =>
                     o.PropertyName == nameof(TestCustomerWithFlagEnum.SomeFlagEnum)).NewValue);
             }
 
@@ -450,10 +482,12 @@ namespace DeltaObjectGeneratorTests.Unit
 
                 var newCustomerJObj = JObject.FromObject(newCustomer);
 
-                var deltaObjects = DeltaObjectFromJObjectGenerator.GetDeltaObjects(originalCustomer, newCustomerJObj);
+                var deltaGroup = DeltaObjectFromJObjectGenerator.GetDeltaObjects(originalCustomer, newCustomerJObj);
 
-                Assert.NotNull(deltaObjects);
-                Assert.Single(deltaObjects);
+                Assert.NotNull(deltaGroup);
+                Assert.Equal(GroupValueConversionStatus.Success, deltaGroup.ValueConversionStatus);
+                Assert.Empty(deltaGroup.DeltaObjects);
+                Assert.Empty(deltaGroup.DeltaObjectsValueConversionFail);
             }
 
             [Fact]
@@ -472,13 +506,15 @@ namespace DeltaObjectGeneratorTests.Unit
 
                 var newCustomerJObj = JObject.FromObject(newCustomer);
 
-                var deltaObjects = DeltaObjectFromJObjectGenerator.GetDeltaObjects(originalCustomer, newCustomerJObj);
+                var deltaGroup = DeltaObjectFromJObjectGenerator.GetDeltaObjects(originalCustomer, newCustomerJObj);
 
-                Assert.NotNull(deltaObjects);
-                Assert.Single(deltaObjects);
-                Assert.Equal(ConversionStatus.Valid, deltaObjects.First(o =>
-                    o.PropertyName == nameof(TestCustomerWithFlagEnum.SomeFlagEnum)).ConversionStatus);
-                Assert.Equal(TestFlagEnum.OneThing, deltaObjects.First(o =>
+                Assert.NotNull(deltaGroup);
+                Assert.Equal(GroupValueConversionStatus.Success, deltaGroup.ValueConversionStatus);
+                Assert.Single(deltaGroup.DeltaObjects);
+                Assert.Empty(deltaGroup.DeltaObjectsValueConversionFail);
+                Assert.Equal(ValueConversionStatus.Success, deltaGroup.DeltaObjects.First(o =>
+                    o.PropertyName == nameof(TestCustomerWithFlagEnum.SomeFlagEnum)).ValueConversionStatus);
+                Assert.Equal(TestFlagEnum.OneThing, deltaGroup.DeltaObjects.First(o =>
                     o.PropertyName == nameof(TestCustomerWithFlagEnum.SomeFlagEnum)).NewValue);
             }
 
@@ -504,13 +540,15 @@ namespace DeltaObjectGeneratorTests.Unit
 
                 var newCustomerJObj = JObject.FromObject(newCustomer);
 
-                var deltaObjects = DeltaObjectFromJObjectGenerator.GetDeltaObjects(originalCustomer, newCustomerJObj);
+                var deltaGroup = DeltaObjectFromJObjectGenerator.GetDeltaObjects(originalCustomer, newCustomerJObj);
 
-                Assert.NotNull(deltaObjects);
-                Assert.Single(deltaObjects);
-                Assert.Equal(ConversionStatus.Valid, deltaObjects.First(o =>
-                    o.PropertyName == nameof(TestCustomerWithNullable.Salary)).ConversionStatus);
-                Assert.Equal(newCustomer.Salary, deltaObjects.First(o =>
+                Assert.NotNull(deltaGroup);
+                Assert.Equal(GroupValueConversionStatus.Success, deltaGroup.ValueConversionStatus);
+                Assert.Single(deltaGroup.DeltaObjects);
+                Assert.Empty(deltaGroup.DeltaObjectsValueConversionFail);
+                Assert.Equal(ValueConversionStatus.Success, deltaGroup.DeltaObjects.First(o =>
+                    o.PropertyName == nameof(TestCustomerWithNullable.Salary)).ValueConversionStatus);
+                Assert.Equal(newCustomer.Salary, deltaGroup.DeltaObjects.First(o =>
                     o.PropertyName == nameof(TestCustomerWithNullable.Salary)).NewValue);
             }
 
@@ -537,10 +575,12 @@ namespace DeltaObjectGeneratorTests.Unit
 
                 var newCustomerJObj = JObject.FromObject(newCustomer);
 
-                var deltaObjects = DeltaObjectFromJObjectGenerator.GetDeltaObjects(originalCustomer, newCustomerJObj);
+                var deltaGroup = DeltaObjectFromJObjectGenerator.GetDeltaObjects(originalCustomer, newCustomerJObj);
 
-                Assert.NotNull(deltaObjects);
-                Assert.Empty(deltaObjects);
+                Assert.NotNull(deltaGroup);
+                Assert.Empty(deltaGroup.DeltaObjects);
+                Assert.Empty(deltaGroup.DeltaObjectsValueConversionFail);
+                Assert.Equal(GroupValueConversionStatus.Success, deltaGroup.ValueConversionStatus);
             }
         }
     }

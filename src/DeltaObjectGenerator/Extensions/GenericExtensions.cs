@@ -35,14 +35,15 @@ namespace DeltaObjectGenerator.Extensions
         }
 
         /// <summary>
-        /// Returns a <see cref="List{DeltaObject}"/>, which will be empty if there are no deltas.
+        /// Returns a <see cref="DeltaGroup"/>, with empty collections of <see cref="DeltaObject"/> 
+        /// if there are no deltas.
         /// </summary>
         /// <typeparam name="T">Any type.</typeparam>
         /// <param name="originalObject">A type of <typeparamref name="T"/>.</param>
         /// <param name="jObject">A type of <see cref="JObject"/>.</param>
-        /// <returns><see cref="List{DeltaObject}"/></returns>
+        /// <returns><see cref="DeltaGroup"/></returns>
         /// <exception cref="ArgumentNullException">Thrown when either arguments are <c>null</c>.</exception>
-        public static List<DeltaObject> GetDeltaObjects<T>(this T originalObject, JObject jObject)
+        public static DeltaGroup GetDeltaObjects<T>(this T originalObject, JObject jObject)
         {
             if (originalObject == null)
             {
