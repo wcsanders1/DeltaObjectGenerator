@@ -9,18 +9,20 @@ namespace DeltaObjectGenerator.Models
     public enum GroupValueConversionStatus
     {
         /// <summary>
-        /// Indicates all deltas are convertible to the type of their associated property. 
+        /// Indicates all delta values are convertible to the type of their associated property. 
+        /// This is also the value when there are no deltas.
         /// </summary>
-        Success = 0,
+        NoneFailed = 0,
 
         /// <summary>
-        /// Indicates some deltas are and some are not convertible to the type of their associated property.
+        /// Indicates some delta values are and some are not convertible to the type of 
+        /// their associated property.
         /// </summary>
-        Partial = 1,
+        SomeFailed = 1,
 
         /// <summary>
-        /// Indicates no deltas are convertible to the type of their associated property.
+        /// Indicates no delta values are convertible to the type of their associated property.
         /// </summary>
-        Fail = 2
+        AllFailed = 2
     }
 }

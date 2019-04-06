@@ -62,7 +62,7 @@ namespace DeltaObjectGeneratorTests.Unit
                 var deltaGroup = sut.GetDeltaObjects(originalCustomer, newCustomerJObj);
 
                 Assert.NotNull(deltaGroup);
-                Assert.Equal(GroupValueConversionStatus.Success, deltaGroup.ValueConversionStatus);
+                Assert.Equal(GroupValueConversionStatus.NoneFailed, deltaGroup.ValueConversionStatus);
                 Assert.Single(deltaGroup.DeltaObjects);
                 Assert.Empty(deltaGroup.DeltaObjectsValueConversionFail);
                 Assert.Equal(ValueConversionStatus.Success, deltaGroup.DeltaObjects[0].ValueConversionStatus);

@@ -61,9 +61,9 @@ Any property on an object not among the above types will be ignored by the delta
 
 A `DeltaGroup` has the following properties:
 
-- `ValueConversionStatus` The status of the conversions of the new values of the properties into their associated types. This is an `enum` with fields of `Success`, `Partial`, and `Fail`. The value is `Success` when no values failed to be converted or when there are no deltas. The value is `Partial` when some values failed to be converted and some conversions succeeded. The value is `Fail` when all values failed to be converted.
-- `DeltaObject` A `List<DeltaObject>` where `ValueConversionStatus` on each `DeltaObject` is `Success`.
-- `DeltaObjectsValueConversionFail` A `List<DeltaObject>` where `ValueConversionStatus` on each `DeltaObject` is `Fail`.
+- `ValueConversionStatus` The status of the conversions of the new values of the properties into their associated types. This is an `enum` with fields of `NoneFailed`, `SomeFailed`, and `AllFailed`. The value is `NoneFailed` when no values failed to be converted or when there are no deltas. The value is `SomeFailed` when some values failed to be converted and some conversions succeeded. The value is `AllFailed` when all values failed to be converted.
+- `DeltaObjects` A `List<DeltaObject>` where `ValueConversionStatus` on each `DeltaObject` is `Success`.
+- `DeltaObjectsValueConversionFail` A `List<DeltaObject>` where `ValueConversionStatus` on each `DeltaObject` is `Fail`. When the value of `ValueConversionStatus` is anything other than `NoneFailed`, then `DeltaObjectsValueConversionFail` will not be empty.
 
 ## <a id="examples">Examples</a>
 
@@ -194,7 +194,7 @@ foreach (var deltaObject in customerDeltaGroup.DeltaObjectsValueConversionFail)
 The above code will print the following to the console:
 
 ```
-Group value conversion status: Partial
+Group value conversion status: SomeFailed
 
 ********************************************
 

@@ -33,7 +33,7 @@ namespace DeltaObjectGeneratorTests.Unit
                 var deltaGroup = DeltaObjectFromJObjectGenerator.GetDeltaObjects(originalCustomer, newCustomerJObj);
 
                 Assert.NotNull(deltaGroup);
-                Assert.Equal(GroupValueConversionStatus.Success, deltaGroup.ValueConversionStatus);
+                Assert.Equal(GroupValueConversionStatus.NoneFailed, deltaGroup.ValueConversionStatus);
                 Assert.Single(deltaGroup.DeltaObjects);
                 Assert.Empty(deltaGroup.DeltaObjectsValueConversionFail);
                 Assert.Equal(ValueConversionStatus.Success, deltaGroup.DeltaObjects[0].ValueConversionStatus);
@@ -59,7 +59,7 @@ namespace DeltaObjectGeneratorTests.Unit
                 var deltaGroup = DeltaObjectFromJObjectGenerator.GetDeltaObjects(originalCustomer, newCustomerJObj);
 
                 Assert.NotNull(deltaGroup);
-                Assert.Equal(GroupValueConversionStatus.Success, deltaGroup.ValueConversionStatus);
+                Assert.Equal(GroupValueConversionStatus.NoneFailed, deltaGroup.ValueConversionStatus);
                 Assert.Single(deltaGroup.DeltaObjects);
                 Assert.Empty(deltaGroup.DeltaObjectsValueConversionFail);
                 Assert.Equal(ValueConversionStatus.Success, deltaGroup.DeltaObjects[0].ValueConversionStatus);
@@ -85,7 +85,7 @@ namespace DeltaObjectGeneratorTests.Unit
                 var deltaGroup = DeltaObjectFromJObjectGenerator.GetDeltaObjects(originalCustomer, newCustomerJObj);
 
                 Assert.NotNull(deltaGroup);
-                Assert.Equal(GroupValueConversionStatus.Success, deltaGroup.ValueConversionStatus);
+                Assert.Equal(GroupValueConversionStatus.NoneFailed, deltaGroup.ValueConversionStatus);
                 Assert.Single(deltaGroup.DeltaObjects);
                 Assert.Empty(deltaGroup.DeltaObjectsValueConversionFail);
                 Assert.Equal(ValueConversionStatus.Success, deltaGroup.DeltaObjects[0].ValueConversionStatus);
@@ -112,7 +112,7 @@ namespace DeltaObjectGeneratorTests.Unit
                 var deltaGroup = DeltaObjectFromJObjectGenerator.GetDeltaObjects(originalCustomer, newCustomerJObj);
 
                 Assert.NotNull(deltaGroup);
-                Assert.Equal(GroupValueConversionStatus.Success, deltaGroup.ValueConversionStatus);
+                Assert.Equal(GroupValueConversionStatus.NoneFailed, deltaGroup.ValueConversionStatus);
                 Assert.Single(deltaGroup.DeltaObjects);
                 Assert.Empty(deltaGroup.DeltaObjectsValueConversionFail);
                 Assert.Equal(ValueConversionStatus.Success, deltaGroup.DeltaObjects[0].ValueConversionStatus);
@@ -139,7 +139,7 @@ namespace DeltaObjectGeneratorTests.Unit
                 var deltaGroup = DeltaObjectFromJObjectGenerator.GetDeltaObjects(originalCustomer, newCustomerJObj);
 
                 Assert.NotNull(deltaGroup);
-                Assert.Equal(GroupValueConversionStatus.Fail, deltaGroup.ValueConversionStatus);
+                Assert.Equal(GroupValueConversionStatus.AllFailed, deltaGroup.ValueConversionStatus);
                 Assert.Single(deltaGroup.DeltaObjectsValueConversionFail);
                 Assert.Empty(deltaGroup.DeltaObjects);
                 Assert.Equal(ValueConversionStatus.Fail, deltaGroup.DeltaObjectsValueConversionFail[0].ValueConversionStatus);
@@ -170,7 +170,7 @@ namespace DeltaObjectGeneratorTests.Unit
                 Assert.NotNull(deltaGroup);
                 Assert.Equal(2, deltaGroup.DeltaObjects.Count);
                 Assert.Empty(deltaGroup.DeltaObjectsValueConversionFail);
-                Assert.Equal(GroupValueConversionStatus.Success, deltaGroup.ValueConversionStatus);
+                Assert.Equal(GroupValueConversionStatus.NoneFailed, deltaGroup.ValueConversionStatus);
                 Assert.Equal(ValueConversionStatus.Success, deltaGroup.DeltaObjects.First(o =>
                     o.PropertyName == nameof(TestCustomer.FirstName)).ValueConversionStatus);
                 Assert.Equal(ValueConversionStatus.Success, deltaGroup.DeltaObjects.First(o =>
@@ -205,7 +205,7 @@ namespace DeltaObjectGeneratorTests.Unit
                 Assert.NotNull(deltaGroup);
                 Assert.Equal(2, deltaGroup.DeltaObjects.Count);
                 Assert.Empty(deltaGroup.DeltaObjectsValueConversionFail);
-                Assert.Equal(GroupValueConversionStatus.Success, deltaGroup.ValueConversionStatus);
+                Assert.Equal(GroupValueConversionStatus.NoneFailed, deltaGroup.ValueConversionStatus);
                 Assert.Equal(ValueConversionStatus.Success, deltaGroup.DeltaObjects.First(o =>
                     o.PropertyName == nameof(TestCustomer.FirstName)).ValueConversionStatus);
                 Assert.Equal(ValueConversionStatus.Success, deltaGroup.DeltaObjects.First(o =>
@@ -238,7 +238,7 @@ namespace DeltaObjectGeneratorTests.Unit
                 var deltaGroup = DeltaObjectFromJObjectGenerator.GetDeltaObjects(originalCustomer, newCustomerJObj);
 
                 Assert.NotNull(deltaGroup);
-                Assert.Equal(GroupValueConversionStatus.Partial, deltaGroup.ValueConversionStatus);
+                Assert.Equal(GroupValueConversionStatus.SomeFailed, deltaGroup.ValueConversionStatus);
                 Assert.Single(deltaGroup.DeltaObjects);
                 Assert.Single(deltaGroup.DeltaObjectsValueConversionFail);
                 Assert.Equal(ValueConversionStatus.Success, deltaGroup.DeltaObjects.First(o =>
@@ -271,7 +271,7 @@ namespace DeltaObjectGeneratorTests.Unit
                 var deltaGroup = DeltaObjectFromJObjectGenerator.GetDeltaObjects(originalCustomer, newCustomerJObj);
 
                 Assert.NotNull(deltaGroup);
-                Assert.Equal(GroupValueConversionStatus.Success, deltaGroup.ValueConversionStatus);
+                Assert.Equal(GroupValueConversionStatus.NoneFailed, deltaGroup.ValueConversionStatus);
                 Assert.Equal(2, deltaGroup.DeltaObjects.Count);
                 Assert.Empty(deltaGroup.DeltaObjectsValueConversionFail);
                 Assert.Equal(ValueConversionStatus.Success, deltaGroup.DeltaObjects.First(o =>
@@ -302,7 +302,7 @@ namespace DeltaObjectGeneratorTests.Unit
                 var deltaGroup = DeltaObjectFromJObjectGenerator.GetDeltaObjects(originalCustomer, newCustomerJObj);
 
                 Assert.NotNull(deltaGroup);
-                Assert.Equal(GroupValueConversionStatus.Success, deltaGroup.ValueConversionStatus);
+                Assert.Equal(GroupValueConversionStatus.NoneFailed, deltaGroup.ValueConversionStatus);
                 Assert.Single(deltaGroup.DeltaObjects);
                 Assert.Empty(deltaGroup.DeltaObjectsValueConversionFail);
                 Assert.Null(deltaGroup.DeltaObjects[0].NewValue);
@@ -327,7 +327,7 @@ namespace DeltaObjectGeneratorTests.Unit
                 var deltaGroup = DeltaObjectFromJObjectGenerator.GetDeltaObjects(originalCustomer, newCustomerJObj);
 
                 Assert.NotNull(deltaGroup);
-                Assert.Equal(GroupValueConversionStatus.Success, deltaGroup.ValueConversionStatus);
+                Assert.Equal(GroupValueConversionStatus.NoneFailed, deltaGroup.ValueConversionStatus);
                 Assert.Empty(deltaGroup.DeltaObjectsValueConversionFail);
                 Assert.Single(deltaGroup.DeltaObjects);
                 Assert.Equal(string.Empty, deltaGroup.DeltaObjects[0].NewValue);
@@ -352,7 +352,7 @@ namespace DeltaObjectGeneratorTests.Unit
                 var deltaGroup = DeltaObjectFromJObjectGenerator.GetDeltaObjects(originalCustomer, newCustomerJObj);
 
                 Assert.NotNull(deltaGroup);
-                Assert.Equal(GroupValueConversionStatus.Success, deltaGroup.ValueConversionStatus);
+                Assert.Equal(GroupValueConversionStatus.NoneFailed, deltaGroup.ValueConversionStatus);
                 Assert.Empty(deltaGroup.DeltaObjects);
                 Assert.Empty(deltaGroup.DeltaObjectsValueConversionFail);
             }
@@ -375,7 +375,7 @@ namespace DeltaObjectGeneratorTests.Unit
                 var deltaGroup = DeltaObjectFromJObjectGenerator.GetDeltaObjects(originalCustomer, newCustomerJObj);
 
                 Assert.NotNull(deltaGroup);
-                Assert.Equal(GroupValueConversionStatus.Success, deltaGroup.ValueConversionStatus);
+                Assert.Equal(GroupValueConversionStatus.NoneFailed, deltaGroup.ValueConversionStatus);
                 Assert.Empty(deltaGroup.DeltaObjects);
                 Assert.Empty(deltaGroup.DeltaObjectsValueConversionFail);
             }
@@ -398,7 +398,7 @@ namespace DeltaObjectGeneratorTests.Unit
                 var deltaGroup = DeltaObjectFromJObjectGenerator.GetDeltaObjects(originalCustomer, newCustomerJObj);
 
                 Assert.NotNull(deltaGroup);
-                Assert.Equal(GroupValueConversionStatus.Success, deltaGroup.ValueConversionStatus);
+                Assert.Equal(GroupValueConversionStatus.NoneFailed, deltaGroup.ValueConversionStatus);
                 Assert.Single(deltaGroup.DeltaObjects);
                 Assert.Empty(deltaGroup.DeltaObjectsValueConversionFail);
                 Assert.Equal(string.Empty, deltaGroup.DeltaObjects[0].NewValue);
@@ -425,7 +425,7 @@ namespace DeltaObjectGeneratorTests.Unit
                 var deltaGroup = DeltaObjectFromJObjectGenerator.GetDeltaObjects(originalCustomer, newCustomerJObj);
 
                 Assert.NotNull(deltaGroup);
-                Assert.Equal(GroupValueConversionStatus.Success, deltaGroup.ValueConversionStatus);
+                Assert.Equal(GroupValueConversionStatus.NoneFailed, deltaGroup.ValueConversionStatus);
                 Assert.Empty(deltaGroup.DeltaObjectsValueConversionFail);
                 Assert.Equal(2, deltaGroup.DeltaObjects.Count);
                 Assert.Equal(ValueConversionStatus.Success, deltaGroup.DeltaObjects.First(o =>
@@ -457,7 +457,7 @@ namespace DeltaObjectGeneratorTests.Unit
                 var deltaGroup = DeltaObjectFromJObjectGenerator.GetDeltaObjects(originalCustomer, newCustomerJObj);
 
                 Assert.NotNull(deltaGroup);
-                Assert.Equal(GroupValueConversionStatus.Success, deltaGroup.ValueConversionStatus);
+                Assert.Equal(GroupValueConversionStatus.NoneFailed, deltaGroup.ValueConversionStatus);
                 Assert.Empty(deltaGroup.DeltaObjectsValueConversionFail);
                 Assert.Single(deltaGroup.DeltaObjects);
                 Assert.Equal(ValueConversionStatus.Success, deltaGroup.DeltaObjects.First(o =>
@@ -485,7 +485,7 @@ namespace DeltaObjectGeneratorTests.Unit
                 var deltaGroup = DeltaObjectFromJObjectGenerator.GetDeltaObjects(originalCustomer, newCustomerJObj);
 
                 Assert.NotNull(deltaGroup);
-                Assert.Equal(GroupValueConversionStatus.Success, deltaGroup.ValueConversionStatus);
+                Assert.Equal(GroupValueConversionStatus.NoneFailed, deltaGroup.ValueConversionStatus);
                 Assert.Empty(deltaGroup.DeltaObjects);
                 Assert.Empty(deltaGroup.DeltaObjectsValueConversionFail);
             }
@@ -509,7 +509,7 @@ namespace DeltaObjectGeneratorTests.Unit
                 var deltaGroup = DeltaObjectFromJObjectGenerator.GetDeltaObjects(originalCustomer, newCustomerJObj);
 
                 Assert.NotNull(deltaGroup);
-                Assert.Equal(GroupValueConversionStatus.Success, deltaGroup.ValueConversionStatus);
+                Assert.Equal(GroupValueConversionStatus.NoneFailed, deltaGroup.ValueConversionStatus);
                 Assert.Single(deltaGroup.DeltaObjects);
                 Assert.Empty(deltaGroup.DeltaObjectsValueConversionFail);
                 Assert.Equal(ValueConversionStatus.Success, deltaGroup.DeltaObjects.First(o =>
@@ -543,7 +543,7 @@ namespace DeltaObjectGeneratorTests.Unit
                 var deltaGroup = DeltaObjectFromJObjectGenerator.GetDeltaObjects(originalCustomer, newCustomerJObj);
 
                 Assert.NotNull(deltaGroup);
-                Assert.Equal(GroupValueConversionStatus.Success, deltaGroup.ValueConversionStatus);
+                Assert.Equal(GroupValueConversionStatus.NoneFailed, deltaGroup.ValueConversionStatus);
                 Assert.Single(deltaGroup.DeltaObjects);
                 Assert.Empty(deltaGroup.DeltaObjectsValueConversionFail);
                 Assert.Equal(ValueConversionStatus.Success, deltaGroup.DeltaObjects.First(o =>
@@ -580,7 +580,7 @@ namespace DeltaObjectGeneratorTests.Unit
                 Assert.NotNull(deltaGroup);
                 Assert.Empty(deltaGroup.DeltaObjects);
                 Assert.Empty(deltaGroup.DeltaObjectsValueConversionFail);
-                Assert.Equal(GroupValueConversionStatus.Success, deltaGroup.ValueConversionStatus);
+                Assert.Equal(GroupValueConversionStatus.NoneFailed, deltaGroup.ValueConversionStatus);
             }
         }
     }

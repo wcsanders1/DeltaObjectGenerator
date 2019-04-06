@@ -18,16 +18,16 @@ namespace DeltaObjectGenerator.Models
             {
                 if (DeltaObjectsValueConversionFail.Count == 0)
                 {
-                    return GroupValueConversionStatus.Success;
+                    return GroupValueConversionStatus.NoneFailed;
                 }
 
                 if (DeltaObjectsValueConversionFail.Count > 0 &&
                     DeltaObjects.Count > 0)
                 {
-                    return GroupValueConversionStatus.Partial;
+                    return GroupValueConversionStatus.SomeFailed;
                 }
 
-                return GroupValueConversionStatus.Fail;
+                return GroupValueConversionStatus.AllFailed;
             }
         }
 

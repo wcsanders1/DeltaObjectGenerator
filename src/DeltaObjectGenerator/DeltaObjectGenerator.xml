@@ -178,19 +178,21 @@
             properties.
             </summary>
         </member>
-        <member name="F:DeltaObjectGenerator.Models.GroupValueConversionStatus.Success">
+        <member name="F:DeltaObjectGenerator.Models.GroupValueConversionStatus.NoneFailed">
             <summary>
-            Indicates all deltas are convertible to the type of their associated property. 
+            Indicates all delta values are convertible to the type of their associated property. 
+            This is also the value when there are no deltas.
             </summary>
         </member>
-        <member name="F:DeltaObjectGenerator.Models.GroupValueConversionStatus.Partial">
+        <member name="F:DeltaObjectGenerator.Models.GroupValueConversionStatus.SomeFailed">
             <summary>
-            Indicates some deltas are and some are not convertible to the type of their associated property.
+            Indicates some delta values are and some are not convertible to the type of 
+            their associated property.
             </summary>
         </member>
-        <member name="F:DeltaObjectGenerator.Models.GroupValueConversionStatus.Fail">
+        <member name="F:DeltaObjectGenerator.Models.GroupValueConversionStatus.AllFailed">
             <summary>
-            Indicates no deltas are convertible to the type of their associated property.
+            Indicates no delta values are convertible to the type of their associated property.
             </summary>
         </member>
         <member name="T:DeltaObjectGenerator.Models.ValueConversionStatus">
