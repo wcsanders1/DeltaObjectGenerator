@@ -33,6 +33,8 @@ Compatible with the following:
 
 This library contains an overloaded extension method `GetDeltaObjects` off of `T` that accepts either another instance of `T` or a `JObject`. In addition, the library offers a class called `DeltaObjectEngine` implementing `IDeltaObjectEngine`, which offers the overloaded method `GetDeltaObjects` providing functionality identical to the extension method just described. Using the interface rather than the extension method offers the possibility of mocking the functionality in tests.
 
+If an object of type `T` is passed as the final argument, the return type is a `List<DeltaObject>`. If an object of type `JObject` is passed as the final argument, the return type is a `DeltaGroup`.
+
 A `DeltaObject` has the following public properties:
 
 - `PropertyName` The name of the property.
@@ -41,7 +43,7 @@ A `DeltaObject` has the following public properties:
 - `NewValue` The new value of the property.
 - `StringifiedOriginalValue` The original value of the property as a `string`.
 - `StringifiedNewValue` The new value of the property as a `string`.
-- `ConversionStatus` The status of the conversion of the new value of the property into the property's type. This is an `enum` with fields of `Valid` and `Invalid`. Note that this property is only relevant when a `DeltaObject` is calculated using a `JObject`, since it is only in that situation where it is possible that a new value could not be converted into the property's type.
+- `ValueConversionStatus` The status of the conversion of the new value of the property into the property's type. This is an `enum` with fields of `Success` and `Fail`. Note that this property is only relevant when a `DeltaObject` is calculated using a `JObject`, since it is only in that situation where it is possible that a new value could not be converted into the property's type.
 
 A `DeltaObject` is generated **only** for non-indexed properties of the following types:
 
@@ -56,6 +58,12 @@ A `DeltaObject` is generated **only** for non-indexed properties of the followin
 - enums
 
 Any property on an object not among the above types will be ignored by the delta-object generator. In addition, you may add attributes to properties or to a class to have the delta-object generator ignore certain properties in certain situations, discussed below in the [attributes](#attributes) section.
+
+A `DeltaGroup` has the following properties:
+
+- `ValueConversionStatus` The status of the conversions of the new values of the properties into their associated types. This is an `enum` with fields of `Success`, `Partial`, and `Fail`. The value is `Success` when no values failed to be converted or when there are no deltas. The value is `Partial` when some values failed to be converted and some conversions succeeded. The value is `Fail` when all values failed to be converted.
+- `DeltaObject` A `List<DeltaObject>` where `ValueConversionStatus` on each `DeltaObject` is `Success`.
+- `DeltaObjectsValueConversionFail` A `List<DeltaObject>` where `ValueConversionStatus` on each `DeltaObject` is `Fail`.
 
 ## <a id="examples">Examples</a>
 
@@ -155,16 +163,30 @@ var newCustomer = new
 
 var newCustomerJObject = JObject.FromObject(newCustomer);
 
-var customerDeltaObjects = originalCustomer.GetDeltaObjects(newCustomerJObject);
+var customerDeltaGroup = originalCustomer.GetDeltaObjects(newCustomerJObject);
 
-foreach (var deltaObject in customerDeltaObjects)
+Console.WriteLine($"Group value conversion status: {customerDeltaGroup.ValueConversionStatus}\n" +
+    $"********************************************\n");
+
+foreach (var deltaObject in customerDeltaGroup.DeltaObjects)
 {
     Console.WriteLine(
         $"Property name: {deltaObject.PropertyName}\n" +
         $"Property alias: {deltaObject.PropertyAlias}\n" +
         $"Original value: {deltaObject.OriginalValue}\n" +
         $"New value: {deltaObject.NewValue}\n" +
-        $"Conversion status: {deltaObject.ConversionStatus}\n\n" +
+        $"Value conversion status: {deltaObject.ConversionStatus}\n\n" +
+        $"********************************************\n");
+}
+
+foreach (var deltaObject in customerDeltaGroup.DeltaObjectsValueConversionFail)
+{
+    Console.WriteLine(
+        $"Property name: {deltaObject.PropertyName}\n" +
+        $"Property alias: {deltaObject.PropertyAlias}\n" +
+        $"Original value: {deltaObject.OriginalValue}\n" +
+        $"New value: {deltaObject.NewValue}\n" +
+        $"Value conversion status: {deltaObject.ConversionStatus}\n\n" +
         $"********************************************\n");
 }
 ```
@@ -172,19 +194,15 @@ foreach (var deltaObject in customerDeltaObjects)
 The above code will print the following to the console:
 
 ```
+Group value conversion status: Partial
+
+********************************************
+
 Property name: FirstName
 Property alias: FirstName
 Original value: originalFirstName
 New value: newFirstName
-Conversion status: Valid
-
-********************************************
-
-Property name: Transactions
-Property alias: Transactions
-Original value: 30
-New value: fifty
-Conversion status: Invalid
+Value conversion status: Success
 
 ********************************************
 
@@ -192,12 +210,20 @@ Property name: DateOfBirth
 Property alias: DateOfBirth
 Original value: 10/10/1919 12:00:00 AM
 New value: 12/8/1979 12:00:00 AM
-Conversion status: Valid
+Value conversion status: Success
+
+********************************************
+
+Property name: Transactions
+Property alias: Transactions
+Original value: 30
+New value: fifty
+Value conversion status: Fail
 
 ********************************************
 ```
 
-Notice that the conversion status of the new value for the `Transactions` property is `Invalid` because the `string` "fifty" cannot be converted into an `int`.
+Notice that the conversion status of the new value for the `Transactions` property is `Fail` because the `string` "fifty" cannot be converted into an `int`.
 
 ##### <a id="case-sensitivity">Case sensitivity</a>
 
