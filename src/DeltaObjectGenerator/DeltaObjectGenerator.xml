@@ -114,6 +114,28 @@
             Indicates that the value cannot be converted into a specific type.
             </summary>
         </member>
+        <member name="T:DeltaObjectGenerator.Models.DeltaGroup">
+            <summary>
+            A class containing a <see cref="T:System.Collections.Generic.List`1"/> for successfully converted properties 
+            and a <see cref="T:System.Collections.Generic.List`1"/> for unsuccessfully converted properties.
+            </summary>
+        </member>
+        <member name="P:DeltaObjectGenerator.Models.DeltaGroup.ConversionStatus">
+            <summary>
+            Indicates whether all, some, or none of the properties were successfully converted 
+            into their associated types.
+            </summary>
+        </member>
+        <member name="P:DeltaObjectGenerator.Models.DeltaGroup.DeltaObjectsConversionSuccess">
+            <summary>
+            Contains <see cref="T:DeltaObjectGenerator.Models.DeltaObject"/>s with <see cref="F:DeltaObjectGenerator.Models.ConversionStatus.Valid"/>.
+            </summary>
+        </member>
+        <member name="P:DeltaObjectGenerator.Models.DeltaGroup.DeltaObjectsConversionFail">
+            <summary>
+            Contains <see cref="T:DeltaObjectGenerator.Models.DeltaObject"/>s with <see cref="F:DeltaObjectGenerator.Models.ConversionStatus.Invalid"/>.
+            </summary>
+        </member>
         <member name="T:DeltaObjectGenerator.Models.DeltaObject">
             <summary>
             A class containing information about a property's deltas.
@@ -156,6 +178,27 @@
             Has a value of <see cref="F:DeltaObjectGenerator.Models.ConversionStatus.Valid"/> when the value of <see cref="P:DeltaObjectGenerator.Models.DeltaObject.NewValue"/>
             can be converted into the type of the property on the model, otherwise the value will be
             <see cref="F:DeltaObjectGenerator.Models.ConversionStatus.Invalid"/>.
+            </summary>
+        </member>
+        <member name="T:DeltaObjectGenerator.Models.GroupConversionStatus">
+            <summary>
+            Enum indicating status of conversion of <see cref="T:Newtonsoft.Json.Linq.JObject"/> values into their associated 
+            properties.
+            </summary>
+        </member>
+        <member name="F:DeltaObjectGenerator.Models.GroupConversionStatus.CompleteSuccess">
+            <summary>
+            Indicates all deltas are convertible to the type of their associated property. 
+            </summary>
+        </member>
+        <member name="F:DeltaObjectGenerator.Models.GroupConversionStatus.Partial">
+            <summary>
+            Indicates some deltas are and some are not convertible to the type of their associated property.
+            </summary>
+        </member>
+        <member name="F:DeltaObjectGenerator.Models.GroupConversionStatus.CompleteFail">
+            <summary>
+            Indicates no deltas are convertible to the type of their associated property.
             </summary>
         </member>
     </members>
