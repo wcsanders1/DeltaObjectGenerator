@@ -15,7 +15,15 @@
     <PackageTags>deltas object jobject</PackageTags>
     <PackageIconUrl>https://raw.githubusercontent.com/wcsanders1/DeltaObjectGenerator/logo/logo.png</PackageIconUrl>
     <AssemblyVersion>1.0.2.0</AssemblyVersion>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
   </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All" />
+  </ItemGroup>
+
 
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|netstandard2.0|AnyCPU'">
     <DocumentationFile>C:\Users\William Sanders\Documents\GitHubRepos\DeltaObjectGenerator\src\DeltaObjectGenerator\DeltaObjectGenerator.xml</DocumentationFile>
